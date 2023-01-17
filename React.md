@@ -45,7 +45,7 @@ Hooks es una característica de React que permite utilizar el estado y otras car
 
 En React, existen varias librerías populares para realizar peticiones HTTP, como Axios, Fetch, o la librería nativa de JavaScript, XMLHttpRequest. A continuación se presentan algunos ejemplos de cómo se pueden realizar peticiones HTTP en React utilizando Axios.
 
-    Instalando Axios:
+**Instalando Axios:**
 
 Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería Axios. Se puede hacer esto ejecutando el siguiente comando en la terminal:
 
