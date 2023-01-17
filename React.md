@@ -40,3 +40,96 @@ En React, las funciones deben ser declaradas dentro del componente y no llevan p
 Hooks es una característica de React que permite utilizar el estado y otras características de los componentes de clase en componentes de función. Para utilizar Hooks, debes importar `useState` en vez de `React`. Luego, puedes crear una constante como esta:
 
 <code>const [counter, setCounter]=useState(0);</code>
+
+# Peticiones HTTP
+
+En React, existen varias librerías populares para realizar peticiones HTTP, como Axios, Fetch, o la librería nativa de JavaScript, XMLHttpRequest. A continuación se presentan algunos ejemplos de cómo se pueden realizar peticiones HTTP en React utilizando Axios.
+
+    Instalando Axios:
+
+Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería Axios. Se puede hacer esto ejecutando el siguiente comando en la terminal:
+
+
+    *npm install axios*
+
+**Realizando una petición GET:**
+
+
+    import { useState, useEffect } from 'react';
+    import reactLogo from './assets/react.svg';
+    import './App. CSS;
+    import axios from 'axios';
+    
+    function App() {
+    const [users, setusers] = useState([])
+
+    useEffect( ( ) => {
+    axios get ("https://jsonplaceholder.typicode.com/users")
+         .then( res=> setUsers(res. data))
+         .catch(error => console.log(error))
+         },[])
+
+         return
+
+   *Imprimir datos petición:*
+
+     <div>
+     {
+     users.map((user,i) =>{
+       return(
+         <p key={i}>{user.name} - {user.email}</p>
+        )
+      })
+     }
+     </div>
+                                         I
+
+ *Se añade [] al "useEffect" para terminar el bucle infinito de peticiones. [] -> es un array de dependencias vacío.*
+
+ En este ejemplo, se importa la librería Axios y se utiliza el método `get()` para realizar una petición GET a la URL especificada. El resultado de la petición se almacena en el estado del componente y se utiliza para renderizar los datos en la vista.
+
+
+**Realizando una petición POST:**
+    
+    import axios from 'axios';
+    class ExampleComponent extends React.Component {
+    state = {
+    title: '',
+    body: ''
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const post = {
+            title: this.state.title,
+            body: this.state.body
+        }
+        axios.post('https://jsonplaceholder.typicode.com/posts', post)
+        .then(res => {
+            console.log(res.data);
+        });
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <input 
+                    type="text" 
+                    name="title" 
+                    value={this.state.title}
+                    onChange={e => this.setState({ title: e.target.value })} 
+                />
+                <textarea 
+                    name="body"
+                    value={this.state.body}
+                    onChange={e => this.setState({ body: e.target.value })}>
+                </textarea>
+                <button type="submit">Submit</button>
+                </form>
+                );
+            }
+        }
+
+        export default ExampleComponent;
+
+En este ejemplo, se utiliza el método `post()` para realizar una petición POST a la URL especificada. Se crea un objeto `post` con los datos a enviar y se pasa como segundo argumento al método `post()`. El resultado de la petición se puede manejar en la promesa `then()` para realizar cualquier acción necesaria, como mostrar un mensaje de éxito al usuario.
