@@ -20,19 +20,22 @@ Para levantar el servidor, debes ejecutar el script de ejecución especificado e
 # Snippets componentes & otros
 Para crear una estructura de componente en React, puedes utilizar las siglas `rfc`, `rfac`, etc.
 
-La interpolación en React se realiza con `{}`.
+La **interpolación** en React se realiza con `{}`.
 
-Existen dos tipos de componentes en React: los componentes de clase y los componentes de función. Los componentes de clase utilizan la estructura de exportar una clase, mientras que los componentes de función exportan una función.
+Existen dos tipos de componentes en React: los **componentes de clase y los componentes de función**. Los componentes de clase utilizan la estructura de exportar una clase, mientras que los componentes de función exportan una función.
 
-El DOM en React se renderiza dos veces. Para evitar esto, se puede usar `<React.StrictMode>`.
+El **DOM en React se renderiza dos veces**. Para evitar esto, se puede usar `<React.StrictMode>`.
 
-Para utilizar Bootstrap en tu proyecto React, debes instalarlo primero con `npm install bootstrap`. Luego, en tu archivo `App.jsx` debes importar el CSS y JS de Bootstrap:
+Para utilizar **Bootstrap** en tu proyecto React, debes instalarlo primero con `npm install bootstrap`. Luego, en tu archivo `App.jsx` debes importar el CSS y JS de Bootstrap:
 <code>
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
 </code>
+
+Los **comentarios** en react se escriben del siguiente modo: 
+<code> {/*Esto es un comentario*/}</code>
 
 # Eventos
 En React, las funciones deben ser declaradas dentro del componente y no llevan paréntesis.
@@ -92,44 +95,52 @@ Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería
 **Realizando una petición POST:**
     
     import axios from 'axios';
-    class ExampleComponent extends React.Component {
-    state = {
-    title: '',
-    body: ''
-    }
+    import { useState } from 'react';
+    import "./Guardar.css"
 
-    handleSubmit = (e) => {
+    export default function Guardar() {
+    const [clientes, setClientes] = useState ({
+    nombre: '',
+    correo: ''
+    });
+
+    function handleSubmit(e){
         e.preventDefault();
-        const post = {
-            title: this.state.title,
-            body: this.state.body
-        }
-        axios.post('https://jsonplaceholder.typicode.com/posts', post)
+        axios.post('https://jsonplaceholder.typicode.com/posts', clientes)
         .then(res => {
-            console.log(res.data);
+            console.log(res.data.nombre);
+            console.log(res.data.correo);
         });
     }
 
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <input 
-                    type="text" 
-                    name="title" 
-                    value={this.state.title}
-                    onChange={e => this.setState({ title: e.target.value })} 
-                />
-                <textarea 
-                    name="body"
-                    value={this.state.body}
-                    onChange={e => this.setState({ body: e.target.value })}>
-                </textarea>
+    return (
+        <div className="globalGuardar">
+            <h2>Guardar un usuario</h2>
+        <form onSubmit={handleSubmit}>
+            <input 
+                type="text" 
+                name="nombre" 
+                placeholder='nombre'
+                value={clientes.nombre}
+                onChange={e => setClientes({ ...clientes,nombre: e.target.value })} 
+            ></input>
+            <input 
+                type="text" 
+                name="correo"
+                placeholder='correo'
+                value={clientes.correo}
+                onChange={e => setClientes({ ...clientes,correo: e.target.value })}>  
+            </input>
                 <button type="submit">Submit</button>
-                </form>
-                );
-            }
-        }
+            </form>
+            </div>
+            );
+    }
 
-        export default ExampleComponent;
 
 En este ejemplo, se utiliza el método `post()` para realizar una petición POST a la URL especificada. Se crea un objeto `post` con los datos a enviar y se pasa como segundo argumento al método `post()`. El resultado de la petición se puede manejar en la promesa `then()` para realizar cualquier acción necesaria, como mostrar un mensaje de éxito al usuario.
+
+En este ejemplo se usa class en el método POST, pero no es necesario.
+
+####Importante
+**Recordar unsar el spread operator cuando asignamos un valor del que vamos a hacer un POST para no sobreescribirlo es decir, quedara algo como: <code>onChange={e => setClientes({ ...clientes,correo: e.target.value })}></code>
