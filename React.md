@@ -142,6 +142,6 @@ En este ejemplo, se utiliza el método `post()` para realizar una petición POST
 
 En este ejemplo se usa class en el método POST, pero no es necesario.
 
-####Importante
+##### **Importante:**
 
 Recordar unsar el spread operator cuando asignamos un valor del que vamos a hacer un POST para no sobreescribirlo es decir, quedara algo como: <code>onChange={e => setClientes({ ...clientes,correo: e.target.value })}></code>
