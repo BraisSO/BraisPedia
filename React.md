@@ -204,7 +204,10 @@ function App() {
 
 export default App
 
+```
 
 
+**Estructura directorios**
 
+![Directorios](./Images/estructuraCarpetasReact.JPG)
 
