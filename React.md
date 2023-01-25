@@ -145,3 +145,66 @@ En este ejemplo se usa class en el método POST, pero no es necesario.
 ##### **Importante:**
 
 Recordar unsar el spread operator cuando asignamos un valor del que vamos a hacer un POST para no sobreescribirlo es decir, quedara algo como: <code>onChange={e => setClientes({ ...clientes,correo: e.target.value })}></code>
+
+
+
+# Rutas
+
+**Imports:**
+
+<code>import {Link} from 'react-router-dom'</code>
+
+<code>import {BrowserRouter, Route, Routes} from 'react-router-dom';</code>
+
+**Ejemplo de panel de navegación**:
+```
+import React from 'react'
+import {Link} from 'react-router-dom'
+
+export default function Navigation() {
+  return (
+      <div>
+          <ul>
+              <li>
+                 <Link to='/navigation'>Inicio</Link>
+              </li>
+              <li>
+                  <Link to='/save'>Guardar</Link>
+              </li>
+          </ul>
+      </div>)
+}
+
+```
+
+**App.jsx con rutas**
+```
+import './App.css'
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import SaveBooks from './components/SaveBooks';
+import NotFound from './Components/NotFound';
+import Navigation from './Components/Navigation';
+
+
+function App() {
+
+
+  return (
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route exact path='/navigation' element={<Navigation/>}/>
+          <Route exact path='/save' element={<SaveBooks/>}/>
+          <Route path='*' element={<NotFound/>}/>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
+}
+
+export default App
+
+
+
+
+
