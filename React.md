@@ -27,12 +27,12 @@ Existen dos tipos de componentes en React: los **componentes de clase y los comp
 El **DOM en React se renderiza dos veces**. Para evitar esto, se puede usar `<React.StrictMode>`.
 
 Para utilizar **Bootstrap** en tu proyecto React, debes instalarlo primero con `npm install bootstrap`. Luego, en tu archivo `App.jsx` debes importar el CSS y JS de Bootstrap:
-<code>
+```
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
-</code>
+```
 
 Los **comentarios** en react se escriben del siguiente modo: 
 <code> {/*Esto es un comentario*/}</code>
