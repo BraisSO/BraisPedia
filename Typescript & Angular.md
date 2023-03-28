@@ -100,6 +100,15 @@ Directives are used to add logic and control flow to templates. Angular has seve
 
 <code><li *ngFor="let item of items">{{ item }}</li></code>
 
+```
+<tr *ngFor="let key of keys">
+            <td>{{key}}</td>
+            <td *ngIf="extCurrenciesNames[key]!='';else elseBlock">{{extCurrenciesNames[key]}}</td>
+            <ng-template #elseBlock>-</ng-template>
+            <td>{{extCurrencies.eur[key]}}</td>
+        </tr>
+```
+
 **Pipes**
 Pipes are used to transform data in templates. Angular has several built-in pipes, such as date, currency, and uppercase, and you can also create your own custom pipes. Here's an example of using the date pipe:
 
@@ -122,4 +131,234 @@ import { MyService } from './my.service';
 })
 export class MyModule { }
 ```
+
+# CRUD
+### HTML
+
+```
+<p>Gardar Banda</p>
+<form (submit)="saveBanda()">
+<input type="text" name="nombre" [(ngModel)]="banda.nombre">
+<input type="submit">
+</form>
+
+
+<p>Gardar disco</p>
+<form (submit)="saveDisco()">
+<input type="text" name="nombre" [(ngModel)]="disco.nombre">
+<input type="number" name="ano" [(ngModel)]="disco.ano">
+<select name="seleccion" [(ngModel)]="seleccion">
+    <option *ngFor="let banda of bandas" [value]="banda.id" >{{banda.nombre}}</option>
+</select>
+<input type="submit">
+</form>
+
+
+<p>Eliminar Banda</p>
+<form >
+<select name="seleccion" [(ngModel)]="seleccion">
+    <option *ngFor="let banda of bandas" [value]="banda.id" >{{banda.nombre}}</option>
+</select>
+
+<button (click)="eliminarBanda(seleccion)">Eliminar</button>
+
+</form>
+
+
+
+<p>Eliminar Disco</p>
+<form >
+<select name="seleccionDisco" [(ngModel)]="seleccionDisco">
+    <option *ngFor="let disco of discos" [value]="disco.id" >{{disco.nombre}}</option>
+</select>
+
+<button (click)="eliminarDisco(seleccionDisco)">Eliminar</button>
+
+</form>
+
+
+<p>Editar Nombre Banda</p>
+<form (submit)="editarBanda(seleccion)">
+    <input type="text" name="nombre" [(ngModel)]="banda.nombre">
+    <select name="seleccion" [(ngModel)]="seleccion">
+        <option *ngFor="let banda of bandas" [value]="banda.id">{{banda.nombre}}</option>
+    </select>
+
+<input type="submit">
+</form>
+
+<p>Editar Nombre Disco</p>
+<form (submit)="editarDisco(seleccionDisco)">
+    <input type="text" name="nombre" [(ngModel)]="disco.nombre">
+    <select name="seleccionDisco" [(ngModel)]="seleccionDisco">
+        <option *ngFor="let disco of discos" [value]="disco.id" >{{disco.nombre}}</option>
+    </select>    
+
+<input type="submit">
+</form>
+
+```
+
+
+### Model
+```
+export class Banda{
+     id:number=0;
+     nombre:string="";
+    
+}
+```
+### Service
+```
+import { Injectable } from '@angular/core';
+import {HttpClient,HttpHeaders} from '@angular/common/http'
+import { Disco } from '../models/Disco';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DiscoService {
+
+  URL:string="http://localhost:8080/api"
+  httpHeaders:HttpHeaders=new HttpHeaders({'Content-Type' : 'application/json'});
+
+  constructor(private http:HttpClient) { }
+
+
+  guardarDisco(disco:Disco){
+    return this.http.post<Disco>(this.URL+'/guardar-album',disco,{headers:this.httpHeaders});
+
+  }
+
+  listarDiscos(){
+    return this.http.get<Disco>(this.URL+'/listar-albums');
+  }
+
+  
+  eliminarDisco(id:number){
+    return this.http.delete<Disco>(this.URL+'/eliminarAlbum-'+id);
+  }
+
+  editarDisco(id:number, disco:Disco){
+    return this.http.put<Disco>(this.URL+'/modificarAlbum/'+id,disco,{headers:this.httpHeaders});
+  }
+
+
+}
+
+```
+
+### Component Typescript 
+
+```
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Banda } from 'src/app/models/Banda';
+import { Disco } from 'src/app/models/Disco';
+import { BandaService } from 'src/app/services/banda.service';
+import { DiscoService } from 'src/app/services/disco.service';
+
+@Component({
+  selector: 'app-formulario',
+  templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.css']
+})
+export class FormularioComponent implements OnInit {
+
+seleccion=0;
+seleccionDisco=0;
+bandas:any=[];
+discos:any=[];
+
+banda:Banda= new Banda();
+disco:Disco= new Disco();
+
+  constructor(private discoService:DiscoService, private bandaService:BandaService, private router:Router) { }
+
+  ngOnInit(): void {
+    this.listaBandas();
+    this.listarDiscos();
+  }
+
+  listaBandas(){
+    this.bandaService.listarBandas().subscribe(res=>{
+      console.log(res)
+      this.bandas=res;
+    })
+  }
+
+  listarDiscos(){
+    this.discoService.listarDiscos().subscribe(res=>{
+      console.log(res);
+      this.discos=res;
+    })
+  }
+
+saveBanda(){
+  this.bandaService.guardarBanda(this.banda).subscribe()
+  
+}
+
+saveDisco(){
+ this.disco.banda.id=(Number)(this.seleccion);
+ this.discoService.guardarDisco(this.disco).subscribe(res=> console.log(res));
+ 
+}
+
+eliminarBanda(id:number){
+  this.bandaService.eliminarBanda(id).subscribe(res=>{
+    console.log(res)
+  })
+}
+
+eliminarDisco(id:number){
+  this.discoService.eliminarDisco(id).subscribe(res=>{
+    console.log(res)
+  })
+}
+
+editarBanda(id:number){
+  this.bandaService.editarBanda(id, this.banda).subscribe(res=>{
+    console.log(res);
+  })
+}
+
+editarDisco(id:number){
+  this.discoService.editarDisco(id, this.disco).subscribe(res=>{
+    console.log(res);
+  })
+}
+
+}
+
+```
+
+# Extra
+
+**Como recargar una página tras ejecutar una funcion:**
+<code> location.reload(); //recarga de la pagina </code>
+
+Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
+
+<hr>
+
+**Como recorrer un mapa:**
+```
+  getExtMoneyList(){
+    this.extCurrencyService.getExtCurrencies().subscribe(res=>{
+      console.log(res);
+      this.extCurrencies=res;
+
+      let i:number=0;
+      for (const key in this.extCurrencies.eur) {
+        this.keys[i]=key;
+        i++;
+        console.log(key, this.extCurrencies.eur[key]);
+      }      
+    })
+  }
+
+```
+
 
