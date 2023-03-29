@@ -360,5 +360,40 @@ Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
   }
 
 ```
+**Configurar Debugger**
+
+```
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ng debugging",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:4200",
+        },
+        {
+            "name": "ng serve",
+            "type": "chrome",
+            "request": "launch",
+            "preLaunchTask": "npm: start",
+            "url": "http://localhost:4200",
+        },
+        {
+            "name": "ng test",
+            "type": "chrome",
+            "request": "launch",
+            "preLaunchTask": "npm: test",
+            "url": "http://localhost:9876/debug.html",
+        }
+    ]
+}
+
+```
+
+Una vez puesto esto en la configuración, marcamos los breakpoint y al ejecutar el código que queremos debuggear, se parará en dichos puntos. *Si ejecutamos otro componente o parte de la página no funciona.*
 
 
