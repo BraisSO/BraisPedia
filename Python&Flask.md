@@ -20,8 +20,22 @@
 <hr>
 
 ##### Para que funcione la ejecución de la base de datos hay que agregar:
-`with app.app_context():
-    db.create_all()`
+
+```
+with app.app_context():
+
+    db.create_all()
+
+```
+
+
+##### Recarga automática de los cambios hechos en la API => *(debug=true)*
+
+```
+if __name__ == "__main__":
+    app.run(debug=True) 
+```
+
 
 
 <hr>
@@ -134,7 +148,7 @@ def index():
 
 #Inicialización de la aplicación (algo así como el MAIN en JAVA)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) 
 
 ```
 
