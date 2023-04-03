@@ -38,6 +38,17 @@ if __name__ == "__main__":
     app.run(debug=True) 
 ```
 
+##### Si queremos cambiar el puerto, a este código debemos añadirle:
+
+```
+if __name__ == "__main__":
+    app.run(debug=True, port=8080) 
+```
+
+##### Funciones:
+
+- Listar dependencias: <code> pip list </code>
+
 
 
 <hr>
@@ -140,7 +151,6 @@ def delete_task(id):
     db.session.commit()
     
     return task_schema.jsonify(task)
-    
 
 #Mensaje en ruta por defecto
 @app.route('/', methods=['GET'])    
@@ -175,3 +185,61 @@ En la operación UPDATE (PUT), se recibe un objeto JSON que contiene los datos d
 En la operación DELETE, se elimina una tarea específica de la tabla "Task" mediante su identificador único (id) y se devuelve como un objeto JSON.
 
 Por último, se define una ruta por defecto que devuelve un mensaje de bienvenida en formato JSON y se inicia la aplicación Flask.
+
+
+**Nota**
+Las funciones de <code>@app.route("url", "metodo")</code> se pueden abreviar llamando directamente al nombre del método. Es decir <code>@app.get("url")</code>, <code>@app.post("url")</code>, <code>@app.put("url")</code>, <code>@app.delete("url")</code>.
+
+<hr>
+
+#### Blueprints (importaciones)
+Un "blueprint" en Python es una forma de organizar y modularizar una aplicación web Flask en secciones lógicas y separadas, lo que facilita la creación de aplicaciones web más grandes y complejas.
+
+![BluePrint1](./Images/Python&Flask/blueprintController.PNG)
+![BluePrint2](./Images/Python&Flask/blueprintMain.PNG)
+
+
+El url_prefix es opcional, sirve para dar una ruta común a todos los endpoints de ese Blueprint.
+
+<hr>
+
+#### Arquetipo
+
+**Estructura inicial**
+![Arquetipo](./Images/Python&Flask/arquetipo.PNG)
+
+**Dependencias / importaciones:**
+<code>pip install 
+flask 
+flask-sqlalchemy 
+flask-marshmallow 
+marshmallow-sqlalchemy 
+python-dotenv 
+flask-cors 
+mysqlclient *existe otro mysql-client pero no funciona en este caso*</code>
+
+
+**Configuración de las variables de entorno, configuración de la base de datos y cadena de conexión**
+Los archivos .env (también conocidos como archivos de configuración) son archivos de texto que se utilizan para almacenar variables de entorno. En un proyecto de Python-Flask, los archivos .env se utilizan para definir variables de entorno específicas para un entorno de implementación particular (por ejemplo, variables de configuración de bases de datos, claves de API, contraseñas, etc.). Los archivos .env son una forma segura y conveniente de administrar las variables de entorno, ya que no es necesario almacenarlas en el código fuente de la aplicación y se pueden mantener separadas del código.
+
+Ficheros modificados:
+- */dev/.env*
+- */dev/dev_env.py*
+- *main. py*
+
+*En la cadena de conexión de la imagen falta se podría añadir el modulo pymysql*:
+
+![dev_env_y_conexionDB](./Images/Python&Flask/dev_env_y_conexionDB.PNG)
+
+
+**Configuración de la base de datos**
+Aquí realizamos las configuraciones de la base de datos. Creación de las tablas, mapeo del objeto y sus características y realizamos un schema con *Marshmallow* que nos va a permitir serializar los objetos que recuperamos y transformarlos directamente en JSON.
+![operacionesDB](./Images/Python&Flask/operacionesDB.PNG)
+
+Esta es la estructura básica de una petición GET. El user repo hace la consulta a la base de datos a través de los métodos de SQLAlchemy. La información recuperada es pasada al controlador que a través de los *schemas* que defina serializa la información gracias a los métodos *Marshmallow* y por último el retorno de esta función es pasada a la ruta que nos las devuelve ya en formato JSON.
+
+![estructuraPeticionGet](./Images/Python&Flask/estructuraPeticionGet.PNG)
+
+Tras realizar estas configuraciones así es como quedaría el *main. py* de nuestra aplicación
+
+![mainPy2](./Images/Python&Flask/mainPy2.PNG)
