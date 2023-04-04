@@ -270,5 +270,16 @@ Similar al POST. Recuperamos el id del que queremos modificar, le asignamos unos
 
 #### Relaciones entre tablas
 
+![Multitabla1](./Images/Python&Flask/multitabla1.PNG)
 
 
+En este caso, la línea de código establece una relación de muchos a uno entre la tabla Nota y la tabla Alumno. Lo que esto significa es que muchos registros (o filas) en la tabla Nota pueden estar asociados a un solo registro en la tabla Alumno.
+
+En otras palabras, un estudiante puede tener muchas notas en la tabla Nota, pero en la tabla Alumno solo habrá una fila asociada a ese estudiante.
+
+En resumen, la línea de código `alumno = db.relationship('Alumno', backref='notas')` establece que muchos registros en la tabla Nota pueden estar asociados a un solo registro en la tabla Alumno, permitiendo acceder a las notas de un estudiante a través de la tabla Alumno.
+
+
+![Multitabla2](./Images/Python&Flask/multitabla2.PNG)
+
+Se definen cuatro rutas en la aplicación Flask que permiten interactuar con los datos en la base de datos. Las rutas get_alumnos y get_notas devuelven todos los alumnos o notas almacenados en la base de datos, respectivamente. Las rutas save_alumno y save_nota permiten agregar nuevos alumnos o notas a la base de datos. Las solicitudes POST para save_nota incluyen un JSON que debe incluir la calificación nota_alumno y el alumno_id asociado a la tabla Alumno.
