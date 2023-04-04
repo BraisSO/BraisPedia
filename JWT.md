@@ -21,7 +21,7 @@ pip install flask_jwt_extended
 **Paso 2: Configura Flask**
 Crea una instancia de la aplicación Flask y configura una clave secreta para usar con JWT. Puedes hacer esto de la siguiente manera:
 
-```
+```python
 from flask import Flask
 from flask_jwt_extended import JWTManager
 
@@ -54,7 +54,7 @@ def login():
 **Paso 4: Crea una ruta protegida**
 Crea una ruta protegida que solo pueda ser accedida por usuarios autenticados con un JWT válido. Puedes hacer esto de la siguiente manera:
 
-```
+```python
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 @app.route('/protected', methods=['GET'])

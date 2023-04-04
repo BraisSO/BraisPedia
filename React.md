@@ -27,7 +27,7 @@ Existen dos tipos de componentes en React: los **componentes de clase y los comp
 El **DOM en React se renderiza dos veces**. Para evitar esto, se puede usar `<React.StrictMode>`.
 
 Para utilizar **Bootstrap** en tu proyecto React, debes instalarlo primero con `npm install bootstrap`. Luego, en tu archivo `App.jsx` debes importar el CSS y JS de Bootstrap:
-```
+```javascript
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
@@ -57,7 +57,7 @@ Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería
 
 **Realizando una petición GET:**
 
-
+```javascript
     import { useState, useEffect } from 'react';
     import reactLogo from './assets/react.svg';
     import './App. CSS;
@@ -73,9 +73,11 @@ Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería
          },[])
 
          return
+  ```
 
    *Imprimir datos petición:*
 
+```html
      <div>
      {
      users.map((user,i) =>{
@@ -85,7 +87,7 @@ Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería
       })
      }
      </div>
-                                         I
+  ```
 
  *Se añade [] al "useEffect" para terminar el bucle infinito de peticiones. [] -> es un array de dependencias vacío.*
 
@@ -93,7 +95,7 @@ Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería
 
 
 **Realizando una petición POST:**
-    
+```javascript
     import axios from 'axios';
     import { useState } from 'react';
     import "./Guardar.css"
@@ -136,7 +138,7 @@ Antes de comenzar a realizar peticiones HTTP, es necesario instalar la librería
             </div>
             );
     }
-
+```
 
 En este ejemplo, se utiliza el método `post()` para realizar una petición POST a la URL especificada. Se crea un objeto `post` con los datos a enviar y se pasa como segundo argumento al método `post()`. El resultado de la petición se puede manejar en la promesa `then()` para realizar cualquier acción necesaria, como mostrar un mensaje de éxito al usuario.
 
@@ -157,7 +159,7 @@ Recordar unsar el spread operator cuando asignamos un valor del que vamos a hace
 <code>import {BrowserRouter, Route, Routes} from 'react-router-dom';</code>
 
 **Ejemplo de panel de navegación**:
-```
+```javascript
 import React from 'react'
 import {Link} from 'react-router-dom'
 
@@ -178,7 +180,7 @@ export default function Navigation() {
 ```
 
 **App.jsx con rutas**
-```
+``` javascript
 import './App.css'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import SaveBooks from './components/SaveBooks';

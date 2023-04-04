@@ -23,7 +23,7 @@
 
 ##### Para que funcione la ejecución de la base de datos hay que agregar:
 
-```
+``` python
 with app.app_context():
 
     db.create_all()
@@ -33,14 +33,14 @@ with app.app_context():
 
 ##### Recarga automática de los cambios hechos en la API => *(debug=true)*
 
-```
+```python
 if __name__ == "__main__":
     app.run(debug=True) 
 ```
 
 ##### Si queremos cambiar el puerto, a este código debemos añadirle:
 
-```
+```python
 if __name__ == "__main__":
     app.run(debug=True, port=8080) 
 ```
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
 #### Ejemplo de controlador y CRUD todo en un mismo documento
 
-```
+```python
 from flask import Flask,request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -243,3 +243,32 @@ Esta es la estructura básica de una petición GET. El user repo hace la consult
 Tras realizar estas configuraciones así es como quedaría el *main. py* de nuestra aplicación
 
 ![mainPy2](./Images/Python&Flask/mainPy2.PNG)
+
+**get by ID & get by username:**
+Lo más llamativo de esta parte es ir pasando el id de una función a otra y la función para buscar por username, que necesita ir recogiendo los datos en un diccionario a través de un bucle.
+
+![Get by id & Get by username](./Images/Python&Flask/getbyid_getbyusername.PNG)
+
+
+**Método Post**
+Recuperamos cada uno de los valores que queremos guardar con el request 
+![Post](./Images/Python&Flask/metodoPost.png)
+
+**Método Put**
+Similar al POST. Recuperamos el id del que queremos modificar, le asignamos unos nuevos valores y lo mandamos a la BD.
+![Put](./Images/Python&Flask/update.PNG)
+
+**Método Delete**
+![Put](./Images/Python&Flask/delete.PNG)
+
+
+**Habilitar CORS**
+![CORS](./Images/Python&Flask/cors.PNG)
+
+
+<hr>
+
+#### Relaciones entre tablas
+
+
+

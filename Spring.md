@@ -33,7 +33,7 @@
 **Dependency Injection**
 Spring uses dependency injection to manage dependencies between objects. It allows you to easily share objects and services across your application. Here's an example of injecting a service into a controller using the @Autowired annotation:
 
-```
+```java
 import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
@@ -51,7 +51,7 @@ public class MyController {
 **Controllers**
 Controllers handle incoming HTTP requests and return an HTTP response. They are typically used for tasks such as handling form submissions, handling RESTful web service requests, and rendering views. Here's an example of a simple controller:
 
-```
+```java
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,7 +67,7 @@ public class MyController {
 **Services**
 Services are used to share data and functionality across controllers. They are typically used for tasks such as fetching data from a database, performing business logic, and sending email. Here's an example of a simple service:
 
-```
+```java
 import org.springframework.stereotype.Service;
 
 @Service
@@ -81,7 +81,7 @@ public class MyService {
 **Repositories**
 Repositories are used to manage data access and provide an abstraction layer between the application and the data storage. They are typically used to work with databases, although they can also be used with other data sources. Here's an example of a simple repository:
 
-```
+```java
 import org.springframework.data.repository.CrudRepository;
 
 public interface MyRepository extends CrudRepository<MyEntity, Long> {
@@ -91,7 +91,7 @@ public interface MyRepository extends CrudRepository<MyEntity, Long> {
 **Spring Boot**
 Spring Boot is a framework that makes it easy to create stand-alone, production-grade Spring-based applications. It provides a lot of sensible defaults and makes it easy to configure and run your application. Here's an example of a simple Spring Boot application:
 
-```
+```java
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -109,7 +109,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-```
+```java
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -130,7 +130,7 @@ This code configures the application to require that users have the role "ADMIN"
 **Spring Data JPA**
 Spring Data JPA is a library that makes it easy to work with JPA (Java Persistence API) in a Spring application. It provides a simple and consistent API for data access, and it also provides support for pagination and sorting. Here's an example of a simple repository interface that extends JpaRepository:
 
-```
+```java
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MyRepository extends JpaRepository<MyEntity, Long> {
@@ -139,7 +139,7 @@ public interface MyRepository extends JpaRepository<MyEntity, Long> {
 **Spring Webflux**
 Spring WebFlux is a non-blocking, reactive web framework for building web applications. It is built on top of the Reactor Project, which is a library for building reactive systems. Here's an example of a simple WebFlux controller:
 
-```
+```java
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;

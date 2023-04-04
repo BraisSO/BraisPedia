@@ -20,7 +20,7 @@
 **Components**
 Angular applications are built using reusable components. A component is a TypeScript class with an associated template that describes the component's layout and content. Here's an example of a simple component:
 
-```
+```typescript
 import { Component } from '@angular/core';
 
 @Component({
@@ -34,7 +34,7 @@ export class WelcomeComponent {
 
 **Templates**
 Templates are used to describe the layout and content of a component. They are written in HTML and can include placeholders for data binding and directives for logic and control flow. Here's an example of a template:
-```
+```typescript
 <div>
   <h1>Welcome to Angular</h1>
   <p>This is a simple example</p>
@@ -44,13 +44,13 @@ Templates are used to describe the layout and content of a component. They are w
 **Data binding**
 Data binding is used to keep the template and component class in sync. Angular supports several types of data binding, including property binding, event binding, and two-way binding. Here's an example of property binding:
 
-```
+```typescript
 <input [value]="name" (input)="name = $event.target.value">
 ```
 **Services**
 Services are used to share data and functionality across components. They are typically used for tasks such as fetching data from a server, logging, and validation. Here's an example of a service:
 
-```
+```typescript
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -65,7 +65,7 @@ export class MyService {
 **Dependency Injection**
 Dependency injection is a design pattern used to manage dependencies between objects and components. Angular has a built-in dependency injection framework that allows you to easily share services and other objects across your application. Here's an example of injecting a service into a component:
 
-```
+```typescript
 import { Component } from '@angular/core';
 import { MyService } from './my.service';
 
@@ -78,7 +78,7 @@ export class MyComponent {
 **Routing**
 Routing allows you to define different URLs for different pages in your application. Angular has a built-in router that allows you to define routes, navigate between routes, and pass data between routes. Here's an example of routing configuration:
 
-```
+```typescript
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { AboutComponent } from './about.component';
@@ -98,9 +98,11 @@ export class AppRoutingModule { }
 **Directives**
 Directives are used to add logic and control flow to templates. Angular has several built-in directives, such as *ngFor, *ngIf, and ngStyle, and you can also create your own custom directives. Here's an example of using the *ngFor directive:
 
-<code><li *ngFor="let item of items">{{ item }}</li></code>
-
+```typescript
+<li *ngFor="let item of items">{{ item }}</li>
 ```
+
+```typescript
 <tr *ngFor="let key of keys">
             <td>{{key}}</td>
             <td *ngIf="extCurrenciesNames[key]!='';else elseBlock">{{extCurrenciesNames[key]}}</td>
@@ -117,7 +119,7 @@ Pipes are used to transform data in templates. Angular has several built-in pipe
 **Modules**
 Modules are used to organize an Angular application into cohesive blocks of functionality. An application is divided into multiple modules and each module can have its own components, services, and other objects. Here's an example of creating a module:
 
-```
+```typescript
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MyComponent } from './my.component';
@@ -135,7 +137,7 @@ export class MyModule { }
 # CRUD
 ### HTML
 
-```
+```html
 <p>Gardar Banda</p>
 <form (submit)="saveBanda()">
 <input type="text" name="nombre" [(ngModel)]="banda.nombre">
@@ -201,7 +203,7 @@ export class MyModule { }
 
 
 ### Model
-```
+```typescript
 export class Banda{
      id:number=0;
      nombre:string="";
@@ -209,7 +211,7 @@ export class Banda{
 }
 ```
 ### Service
-```
+```typescript
 import { Injectable } from '@angular/core';
 import {HttpClient,HttpHeaders} from '@angular/common/http'
 import { Disco } from '../models/Disco';
@@ -251,7 +253,7 @@ export class DiscoService {
 
 ### Component Typescript 
 
-```
+```typescript
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Banda } from 'src/app/models/Banda';
@@ -344,7 +346,7 @@ Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
 <hr>
 
 **Como recorrer un mapa:**
-```
+```typescript
   getExtMoneyList(){
     this.extCurrencyService.getExtCurrencies().subscribe(res=>{
       console.log(res);
@@ -362,7 +364,7 @@ Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
 ```
 **Configurar Debugger**
 
-```
+```json
 {
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
