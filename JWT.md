@@ -7,15 +7,14 @@ Los JWT se utilizan comúnmente para la autenticación y la autorización en apl
 **Paso 1: Instala las dependencias**
 Para usar JWT con Python y Flask, necesitarás instalar las siguientes dependencias:
 
-```
+```bash
 flask
 flask_jwt_extended
 ```
 Puedes instalarlas usando pip:
-```
+```bash
 pip install flask
 pip install flask_jwt_extended
-
 ```
 
 **Paso 2: Configura Flask**
@@ -33,7 +32,7 @@ jwt = JWTManager(app)
 **Paso 3: Crea una ruta de login**
 Crea una ruta de login donde los usuarios puedan enviar sus credenciales para autenticarse. En esta ruta, verificarás las credenciales y generarás un JWT si la autenticación es exitosa. Puedes hacer esto de la siguiente manera:
 
-```
+```python
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 
@@ -66,3 +65,11 @@ def protected():
 
 **Paso 5: Ejecuta la aplicación**
 Ejecuta la aplicación Flask y realiza una solicitud a la ruta de login para obtener un JWT. Luego, usa el JWT para acceder a la ruta protegida. Puedes hacer esto usando una herramienta como curl o Postman.
+
+Para ello, agrega una cabecera HTTP llamada "Authorization" a la solicitud y establece su valor en "Bearer [TOKEN_JWT]", donde [TOKEN_JWT] es el token JWT que recibiste en la respuesta. Por ejemplo:
+
+```bash
+Authorization: Bearer eyJhbGciOiJIUzI1Ni...
+```
+
+Con estos pasos, podrás probar la ruta de login en Flask usando Postman y ver cómo funciona la autenticación JWT.

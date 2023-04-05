@@ -28,6 +28,11 @@ with app.app_context():
 
     db.create_all()
 
+"""
+Si queremos que se creen automaticamente las tablas debemos colorcar 
+estas líneas de código después de la definición de la clase/clases que van 
+a estar mapeadas con la base de datos
+"""
 ```
 
 
@@ -283,3 +288,169 @@ En resumen, la línea de código `alumno = db.relationship('Alumno', backref='no
 ![Multitabla2](./Images/Python&Flask/multitabla2.PNG)
 
 Se definen cuatro rutas en la aplicación Flask que permiten interactuar con los datos en la base de datos. Las rutas get_alumnos y get_notas devuelven todos los alumnos o notas almacenados en la base de datos, respectivamente. Las rutas save_alumno y save_nota permiten agregar nuevos alumnos o notas a la base de datos. Las solicitudes POST para save_nota incluyen un JSON que debe incluir la calificación nota_alumno y el alumno_id asociado a la tabla Alumno.
+
+
+<hr>
+
+#### Hasheo de contraseñas y verificación de login
+
+Este apartado no tiene mucho misterio. Solo debemos importar la librería para hacer el hash y el check y cuando se envíen las contraseñas a la base de datos estas deben ser hasheadas y al recuperarlas verificadas.
+
+```python
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+from werkzeug.security import generate_password_hash, check_password_hash #Librerias para hashear y verificar
+
+app = Flask(__name__) 
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root@localhost/login"
+
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
+
+
+class User(db.Model):
+    __tablename__= 'users' #Cambio del mapeo de la tabla user a users en plural
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150))
+    password = db.Column(db.String(160))
+    
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('id','username', 'password')
+        
+with app.app_context():
+    db.create_all()  
+        
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+
+
+@app.post("/save-user")
+def save_user():
+    username = request.json['username']
+    password= request.json['password']
+    
+    password_hash = generate_password_hash(password) #Hasheado de la contraseña
+    
+    user = User(username, password_hash) #Envio de la contraseña hasheada
+    
+    db.session.add(user)
+    db.session.commit()
+    return user_schema.dump(user)
+
+
+@app.post('/login')
+def login():
+    username = request.json['username']
+    password= request.json['password']
+    
+    user = User.query.filter_by(username = username).one_or_none()  #Checkeo para ver primero si existe el usuario
+    
+    if user is not None and check_password_hash(user.password, password): #Si este existe se comprueba que la contraseña coincida con el hash
+        return jsonify({'success': 'usuario autorizado'})
+
+    else: 
+        return jsonify({'error':'unauthorized'})    
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+
+<hr>
+
+#### JWT (Session Tokens)
+
+*Tutorial paso a paso en [JWT](https://github.com/BraisSO/BraisPedia/blob/main/JWT.md) y prueba con POSTMAN*.
+
+```python
+
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+from werkzeug.security import generate_password_hash, check_password_hash 
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity #Importes para la reación y verificación de los tokens
+
+
+app = Flask(__name__) 
+app.config['JWT_SECRET_KEY'] = 'clave_secreta' #Clave secreta (?)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root@localhost/login"
+
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
+jwt= JWTManager(app) #Instanciación de JWT
+
+
+class User(db.Model):
+    __tablename__= 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150))
+    password = db.Column(db.String(160))
+    
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('id','username', 'password')
+        
+with app.app_context():
+    db.create_all()  
+        
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+
+
+@app.post("/save-user")
+def save_user():
+    username = request.json['username']
+    password= request.json['password']
+    
+    password_hash = generate_password_hash(password)
+    
+    user = User(username, password_hash) 
+    
+    db.session.add(user)
+    db.session.commit()
+    return user_schema.dump(user)
+
+
+@app.post('/login')
+def login():
+    username = request.json['username']
+    password= request.json['password']
+    
+    user = User.query.filter_by(username = username).one_or_none() 
+    
+    if user is not None and check_password_hash(user.password, password): 
+        access_token = create_access_token(identity=username) #Si el login es correcto se crea el token y se asocia a un usuario
+        return jsonify({access_token: access_token},200) #Retorno de dicho token (no recomendable ni necesario - solo a modo de prueba)
+
+    else: 
+        return jsonify({'error':'unauthorized'})    
+    
+
+@app.get('/protected')
+@jwt_required() #Le decimos que para acceder a esta ruta es necesario el token
+def protected():
+    current_user = get_jwt_identity() #Recuperamos el usuario asociado a traves del gestor del propio gestor de tokens
+    return jsonify(logged_in_as=current_user)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+En el código, se utiliza JWT (JSON Web Token) para autenticar y autorizar a los usuarios que utilizan la API. JWT es un estándar abierto basado en JSON para crear tokens de acceso que se pueden utilizar para autenticar a los usuarios. Un token JWT contiene información del usuario y se firma digitalmente para garantizar su autenticidad.
+
+Para utilizar JWT en Flask, se importa la extensión "flask_jwt_extended" y se crea un objeto JWTManager. Luego, se puede decorar una función de vista con la función "jwt_required" para proteger esa ruta y asegurarse de que el usuario esté autenticado y tenga un token JWT válido antes de permitir el acceso.
+
+Por último, la función "create_access_token" para generar un token JWT cuando se autentica un usuario correctamente en la ruta de inicio de sesión. Este token se devuelve al usuario en la respuesta para que lo use en futuras solicitudes que requieran autenticación. También se utiliza la función "get_jwt_identity" para recuperar la identidad del usuario asociada con el token JWT en la ruta protegida.
