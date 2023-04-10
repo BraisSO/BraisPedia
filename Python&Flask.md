@@ -1,4 +1,23 @@
 # Python & Flask
+**Índice**
+1. [Introducción](#intro)
+2. [CRUD](#crud)
+3. [Blueprints](#blueprints)
+4. [Ejemplo de Arquetipo](#arquetipo)
+5. [Habilitar CORS](#habilitarCors)
+6. [Relaciones entre tablas](#relacionesTablas)
+7. [Hasheo de contraseñas & Login](#hashLogin)
+8. [JWT](#jwt)
+9. [Headers](#headers)
+10. [Tratamiento de respuestas bytes & JSON](#tratamientoRespuestas)
+11. [Codigos de Estado y su tratamiento](#codigosEstado)
+12. [Redirecciones](#redirecciones)
+13. [Timeouts](#timeouts)
+14. [Unit Testing](#unitTesting)
+15. [Enlaces de interés](#enlaces)
+
+
+<span id='intro'>
 
 #### Creacion de un entorno virtual de python
 
@@ -18,6 +37,7 @@
 
 **pymysql:** es un controlador de base de datos MySQL para Python. Se utiliza para conectarse a una base de datos MySQL y ejecutar consultas SQL.
 
+</span>
 
 <hr>
 
@@ -50,15 +70,23 @@ if __name__ == "__main__":
     app.run(debug=True, port=8080) 
 ```
 
-##### Funciones:
+`if __name__ == "__main__"` es una construcción comúnmente utilizada en Python para verificar si el archivo actual se está ejecutando como el programa principal (es decir, si es el archivo que se ejecuta cuando se llama desde la línea de comando) o si se está importando como un módulo en otro programa.
+
+Cuando se ejecuta un archivo de Python directamente desde la línea de comando, Python establece la variable __name__ en el valor "__main__". Por lo tanto, la construcción `if __name__ == "__main__"` se utiliza para garantizar que el código dentro de ella solo se ejecute cuando se ejecuta el archivo directamente y no cuando se importa como un módulo en otro programa.
+
+##### Funciones & otras librerías:
 
 - Listar dependencias: <code> pip list </code>
+- `from pprint import pprint` : **Pretty Print**
+
+"pprint" es un módulo en Python que proporciona la función "pprint()", que se utiliza para imprimir objetos de manera más legible para los humanos. La función "pprint()" es similar a la función "print()", pero agrega formato y estructura a la salida para facilitar la lectura.
 
 
 
 <hr>
 
 
+<span id='crud'>
 #### Ejemplo de controlador y CRUD todo en un mismo documento
 
 ```python
@@ -190,12 +218,14 @@ En la operación UPDATE (PUT), se recibe un objeto JSON que contiene los datos d
 En la operación DELETE, se elimina una tarea específica de la tabla "Task" mediante su identificador único (id) y se devuelve como un objeto JSON.
 
 Por último, se define una ruta por defecto que devuelve un mensaje de bienvenida en formato JSON y se inicia la aplicación Flask.
-
+</span>
 
 **Nota**
 Las funciones de <code>@app.route("url", "metodo")</code> se pueden abreviar llamando directamente al nombre del método. Es decir <code>@app.get("url")</code>, <code>@app.post("url")</code>, <code>@app.put("url")</code>, <code>@app.delete("url")</code>.
 
 <hr>
+
+<span id='blueprints'>
 
 #### Blueprints (importaciones)
 Un "blueprint" en Python es una forma de organizar y modularizar una aplicación web Flask en secciones lógicas y separadas, lo que facilita la creación de aplicaciones web más grandes y complejas.
@@ -206,7 +236,11 @@ Un "blueprint" en Python es una forma de organizar y modularizar una aplicación
 
 El url_prefix es opcional, sirve para dar una ruta común a todos los endpoints de ese Blueprint.
 
+</span>
+
 <hr>
+
+<span id='arquetipo'>
 
 #### Arquetipo
 
@@ -266,12 +300,19 @@ Similar al POST. Recuperamos el id del que queremos modificar, le asignamos unos
 **Método Delete**
 ![Put](./Images/Python&Flask/delete.PNG)
 
+</span>
+
+<span id='habilitarCors'>
 
 **Habilitar CORS**
 ![CORS](./Images/Python&Flask/cors.PNG)
 
+</span>
+
 
 <hr>
+
+<span id='relacionesTablas'>
 
 #### Relaciones entre tablas
 
@@ -289,8 +330,11 @@ En resumen, la línea de código `alumno = db.relationship('Alumno', backref='no
 
 Se definen cuatro rutas en la aplicación Flask que permiten interactuar con los datos en la base de datos. Las rutas get_alumnos y get_notas devuelven todos los alumnos o notas almacenados en la base de datos, respectivamente. Las rutas save_alumno y save_nota permiten agregar nuevos alumnos o notas a la base de datos. Las solicitudes POST para save_nota incluyen un JSON que debe incluir la calificación nota_alumno y el alumno_id asociado a la tabla Alumno.
 
+<span>
 
 <hr>
+
+<span id='hashLogin'>
 
 #### Hasheo de contraseñas y verificación de login
 
@@ -363,8 +407,11 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
+</span>
 
 <hr>
+
+<span id='jwt'>
 
 #### JWT (Session Tokens)
 
@@ -454,3 +501,265 @@ En el código, se utiliza JWT (JSON Web Token) para autenticar y autorizar a los
 Para utilizar JWT en Flask, se importa la extensión "flask_jwt_extended" y se crea un objeto JWTManager. Luego, se puede decorar una función de vista con la función "jwt_required" para proteger esa ruta y asegurarse de que el usuario esté autenticado y tenga un token JWT válido antes de permitir el acceso.
 
 Por último, la función "create_access_token" para generar un token JWT cuando se autentica un usuario correctamente en la ruta de inicio de sesión. Este token se devuelve al usuario en la respuesta para que lo use en futuras solicitudes que requieran autenticación. También se utiliza la función "get_jwt_identity" para recuperar la identidad del usuario asociada con el token JWT en la ruta protegida.
+
+</span>
+
+<hr>
+
+<span id='headers'>
+
+#### Headers
+La librería *requests* de python ya nos da configurados los headers para realizar las peticiones. Si queremos modificar los mismo debemos configurar los parametros que deseemos y pasarlos en la petición después de la URL. 
+
+Una vez el servidor nos devuelve una respuesta con
+`resp_obj.headers` accederíamos a los headers que nos devuelve la API, mientras que con `resp_obj.request.headers` accedemos a los que tiene configurados nuestra petición.
+
+#### Peticiones Head & Options
+
+**Head Request:** Sirve para comprobar el contenido de los endpoints antes de realizar un get. Se accede a través de los headers, ya que el cuerpo de la petición retornará vacío.
+
+**Options Request:** Sirve para comprobar la configuración de los endpoints (operaciones disponibles, CORS, etc.). Al igual que la *head request* el cuerpo de la petición retornará vacío y se accederá a través del header.ç
+
+</span>
+
+<span id='tratamientoRespuestas'>
+
+#### Manejo de imágenes - respuesta de bytes**
+```
+from PIL import Image
+from io import BytesIO
+
+```
+"**PIL**" (Python Imaging Library) es una biblioteca de Python que se utiliza para trabajar con imágenes. Proporciona una amplia gama de funciones y métodos para abrir, manipular y guardar imágenes de varios formatos.
+
+El módulo "**Image**" es uno de los módulos principales de PIL y proporciona una clase Image que se utiliza para representar una imagen. La clase Image tiene muchos métodos útiles, como "resize", "rotate", "crop", "paste", "save", entre otros, que se pueden usar para manipular imágenes.
+
+El módulo "**BytesIO**" proporciona una forma conveniente de trabajar con datos binarios en Python. Específicamente, se utiliza para trabajar con datos de bytes en memoria en lugar de almacenarlos en disco. Puede crear un objeto BytesIO, escribir datos binarios en él y luego leerlos en memoria, todo sin tener que escribirlos en disco.
+
+
+#### Manejo de las respuestas y envíos (JSON)
+`
+import json
+`
+
+La función "**json()**" en Python es un método que se utiliza para decodificar datos en formato JSON a objetos Python. El formato JSON (JavaScript Object Notation) se utiliza para intercambiar datos entre aplicaciones web y móviles. La función "json()" toma un objeto JSON como entrada y devuelve un objeto Python.
+
+ Aunque **los datos en formato JSON** pueden ser leídos por un humano, **no son directamente utilizables por un programa en Python**. Por lo tanto, necesitas decodificar los datos JSON para convertirlos en objetos Python que puedan ser manipulados por tu código.
+
+Por ejemplo, si tienes un servicio web que devuelve datos en formato JSON, necesitarás decodificarlos para utilizarlos en tu programa. Una vez que los datos se hayan decodificado en objetos Python, podrás acceder a ellos y manipularlos utilizando las funciones y métodos de Python.
+
+Del mismo modo, si deseas enviar datos desde tu programa Python a un servicio web, necesitarás codificarlos en formato JSON. La función "json.dumps()" se utiliza para codificar objetos Python en formato JSON antes de enviarlos a través de una solicitud HTTP o un servicio web.
+
+En resumen, la conversión entre objetos JSON y objetos Python es necesaria para facilitar la comunicación entre aplicaciones que utilizan diferentes formatos de datos. La función "json()" en Python es una herramienta útil que te permite convertir datos JSON en objetos Python y viceversa.
+
+</span>
+
+<span id='codigosEstado'>
+
+#### Status Codes
+Códigos de estado más comunes:
+
+**200 OK:** Este es el código de estado HTTP estándar para una respuesta exitosa. Indica que la solicitud se ha completado correctamente y que el servidor ha devuelto los datos solicitados.
+
+**400 Bad Request:** Este código de estado indica que la solicitud enviada al servidor es incorrecta o incompleta. Puede deberse a que la solicitud no cumple con el formato esperado o porque falta información necesaria para procesar la solicitud.
+
+**401 Unauthorized:** Este código de estado indica que la solicitud requiere autenticación y que el usuario no ha proporcionado credenciales válidas. Esto puede suceder, por ejemplo, cuando intentas acceder a una API que requiere un token de autenticación válido.
+
+**403 Forbidden:** Este código de estado indica que el servidor ha entendido la solicitud, pero se niega a procesarla. Puede deberse a que el usuario no tiene los permisos necesarios para acceder a los datos solicitados.
+
+**404 Not Found:** Este código de estado indica que el servidor no pudo encontrar el recurso solicitado. Puede deberse a que la URL es incorrecta o que el recurso no existe.
+
+**500 Internal Server Error:** Este código de estado indica que el servidor ha encontrado un error interno mientras procesaba la solicitud. Puede deberse a problemas en el servidor o en la aplicación que se está ejecutando en el servidor.
+
+**503 Service Unavailable:** Este código de estado indica que el servidor no está disponible en este momento. Puede deberse a que el servidor está sobrecargado o en mantenimiento.
+
+**Como manejar códigos de estado:**
+
+Cuando realizas una solicitud HTTP utilizando la biblioteca "requests" de Python, es posible que desees manejar las excepciones que puedan ocurrir, como errores de red o errores en la respuesta del servidor. Una forma de hacer esto es mediante el uso de la función "**raise_for_status()**" de "requests".
+
+La función "raise_for_status()" verifica si la respuesta de la solicitud HTTP indica un error y, de ser así, lanza una excepción. Si la respuesta no indica un error, la función no hace nada y la ejecución continúa normalmente.
+
+```python
+import requests
+from requests import exceptions #Metodos y propiedades para manejar excepciones
+
+url = 'https://jsonplaceholder.typicode.com/todos/999'
+
+try:
+    response = requests.get(url)
+    response.raise_for_status()
+except requests.exceptions.HTTPError as error:
+    if response.status_code == 400:
+        print(f'Error 400: Solicitud malformada: {error}')
+    elif response.status_code == 401:
+        print(f'Error 401: No autorizado: {error}')
+    elif response.status_code == 404:
+        print(f'Error 404: Recurso no encontrado: {error}')
+    else:
+        print(f'Error {response.status_code}: {error}')
+except requests.exceptions.RequestException as error:
+    print(f'Error en la conexión: {error}')
+else:
+    print('La solicitud fue exitosa')
+    print(response.json())
+
+```
+
+</span>
+
+
+<span id='redirecciones'>
+
+#### Redirecciones
+Las redirecciones son respuestas del servidor que indican al cliente que la página web solicitada se ha movido a otra dirección. Esto puede ocurrir por varias razones, como cambios en la estructura de la URL, cambios en la ubicación de los recursos, entre otros.
+
+Para comprobar si nuestra petición ha sido redireccionada y ver el historial de redirecciones lo hacemos de la siguiente manera:
+
+![Redirecciones](./Images/Python&Flask/redirecciones.PNG)
+
+Para evitar que nuestra petición original no sufra redirecciones lo indicaremos en la petición GET de la siguiente manera:
+
+`response = response.get('URL', allow_redirects=False)`
+
+</span>
+
+<span id='timeouts'>
+
+#### Timeouts
+
+Los timeouts son mecanismos que se utilizan para limitar el tiempo de espera de una solicitud HTTP antes de que se produzca un error de tiempo de espera. Esto es importante porque algunas solicitudes pueden tardar mucho tiempo en ser completadas y pueden causar problemas si el cliente está esperando indefinidamente por una respuesta.
+
+Por ejemplo, si realizas una solicitud HTTP GET a un servidor que está inactivo o no responde, es posible que el cliente espere indefinidamente por una respuesta y se bloquee. Al establecer un tiempo de espera, se garantiza que la solicitud se interrumpa después de un período de tiempo determinado y el cliente reciba una respuesta de error.
+
+```python
+import requests
+
+try:
+    response = requests.get('https://api.example.com/calculate', timeout=5)
+    # Procesar la respuesta aquí
+except requests.exceptions.Timeout:
+    # Manejar la excepción de tiempo de espera aquí
+    print("Se ha agotado el tiempo de espera para la solicitud.")
+```
+
+**El tiempo que indicamos en la petición corresponde con el tiempo que el servidor tarda en comenzar a dar la respuesta, no el tiempo en el que se completa la misma.**
+
+Si queremos indicar un tiempo en el que se debe completar la lectura de la petición debemos indicarlo añadiendo un segundo parametro:
+
+`response = requests.get('https://api.example.com/calculate', timeout=5,18)`
+
+Para eliminar cualquier tipo de timeout:
+`timeout=None`
+
+</span>
+
+<hr>
+
+<span id='unitTesting'>
+
+#### Unit Testing 
+
+En Flask, se utilizan bibliotecas de pruebas como "unittest" o "pytest" para escribir y ejecutar pruebas unitarias. A continuación, se presentan algunos ejemplos de pruebas unitarias que se pueden realizar en una aplicación Flask:
+
+**Prueba de funciones:** Se pueden realizar pruebas de las funciones de la aplicación para asegurarse de que se comportan de acuerdo con las especificaciones. Por ejemplo, si tienes una función que calcula el promedio de una lista de números, puedes escribir una prueba que compruebe que el resultado devuelto es el esperado:
+
+```python
+def test_average():
+    assert average([1, 2, 3, 4, 5]) == 3
+    assert average([2, 2, 2, 2]) == 2
+    assert average([0] == 0)
+```
+**Prueba de rutas:** Se pueden realizar pruebas para asegurarse de que las rutas de la aplicación funcionan correctamente y devuelven las respuestas adecuadas. Por ejemplo, si tienes una ruta que devuelve una lista de usuarios, puedes escribir una prueba que compruebe que la ruta devuelve la lista de usuarios esperada:
+
+```python
+def test_get_users():
+    response = client.get('/users')
+    assert response.status_code == 200
+    assert len(response.json()) == 3
+```
+**Prueba de validación de entrada:** Se pueden realizar pruebas para asegurarse de que la aplicación maneje correctamente la validación de entrada y devuelva los errores adecuados en caso de que se proporcionen datos de entrada incorrectos. Por ejemplo, si tienes una ruta que espera un número de identificación de usuario como entrada, puedes escribir una prueba que compruebe que la ruta devuelve un error 400 si se proporciona un identificador de usuario no válido:
+
+```python
+def test_invalid_user_id():
+    response = client.get('/users/abc')
+    assert response.status_code == 400
+```
+
+En las pruebas unitarias, la sintaxis que deberías conocer en Python es la siguiente:
+
+**assert:** La sentencia assert se utiliza para verificar que una afirmación es verdadera. Si la afirmación es falsa, la sentencia genera una excepción AssertionError y la prueba falla.
+
+**setUp:** El método setUp se utiliza para realizar cualquier configuración necesaria antes de que se ejecute cada prueba.
+
+**tearDown:** El método tearDown se utiliza para realizar cualquier limpieza necesaria después de que se ejecuta cada prueba.
+
+```python
+import unittest
+from mymodule import add_numbers
+
+class TestAddNumbers(unittest.TestCase):
+    def setUp(self):
+        self.numbers = [1, 2, 3, 4, 5]
+
+    def tearDown(self):
+        del self.numbers
+
+    def test_add_numbers(self):
+        result = add_numbers(self.numbers)
+        self.assertEqual(result, 15)
+
+    def test_add_negative_numbers(self):
+        numbers = [-1, -2, -3]
+        result = add_numbers(numbers)
+        self.assertEqual(result, -6)
+
+    def test_add_float_numbers(self):
+        numbers = [1.5, 2.5, 3.5]
+        result = add_numbers(numbers)
+        self.assertEqual(result, 7.5)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+Si deseas agregar un **mock** a tus pruebas unitarias en Flask, puedes utilizar la biblioteca ***unittest.mock*** de Python, que proporciona una forma de simular objetos y funciones.
+
+Por ejemplo, supongamos que tienes una aplicación Flask que hace una solicitud a una API externa utilizando la función requests.get(). Si deseas probar la función que llama a requests.get(), pero no deseas realizar una solicitud real a la API externa durante la prueba, puedes utilizar un mock de la función requests.get() para simular la respuesta de la API externa.
+
+A continuación, se presenta un ejemplo de cómo agregar un mock a una prueba unitaria en Flask utilizando unittest.mock:
+
+```python
+import unittest
+from unittest.mock import patch
+from myapp import app, get_data_from_api
+
+class TestGetDataFromAPI(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+
+    def tearDown(self):
+        pass
+
+    @patch('myapp.requests.get')
+    def test_get_data_from_api(self, mock_get):
+        mock_get.return_value.json.return_value = {'data': 'example'}
+        response = self.app.get('/api')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {'data': 'example'})
+
+if __name__ == '__main__':
+    unittest.main()
+```
+En este ejemplo, se utiliza el decorador **@patch** para crear un mock de la función requests.get() en la función test_get_data_from_api. La función mock_get se pasa como argumento al método de prueba, y se utiliza para simular la respuesta de la API externa. La función mock_get.return_value.json.return_value se utiliza para simular la respuesta JSON de la API externa.
+
+</span>
+
+<hr>
+
+#### Enlaces de interés
+
+<span id='enlaces'>
+
+ - [Guía completa Flask](https://j2logo.com/tutorial-flask-espanol/)
+
+</span>
