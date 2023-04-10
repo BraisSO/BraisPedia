@@ -305,6 +305,7 @@ Similar al POST. Recuperamos el id del que queremos modificar, le asignamos unos
 <span id='habilitarCors'>
 
 **Habilitar CORS**
+
 ![CORS](./Images/Python&Flask/cors.PNG)
 
 </span>
