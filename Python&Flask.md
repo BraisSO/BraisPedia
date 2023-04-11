@@ -14,7 +14,9 @@
 12. [Redirecciones](#redirecciones)
 13. [Timeouts](#timeouts)
 14. [Unit Testing](#unitTesting)
-15. [Enlaces de interés](#enlaces)
+15. [DTO](#dto)
+16. [Flechas y Lambdas](#flechasylambdas)
+17. [Enlaces de interés](#enlaces)
 
 
 <span id='intro'>
@@ -37,7 +39,6 @@
 
 **pymysql:** es un controlador de base de datos MySQL para Python. Se utiliza para conectarse a una base de datos MySQL y ejecutar consultas SQL.
 
-</span>
 
 <hr>
 
@@ -52,6 +53,8 @@ with app.app_context():
 Si queremos que se creen automaticamente las tablas debemos colorcar 
 estas líneas de código después de la definición de la clase/clases que van 
 a estar mapeadas con la base de datos
+
+Cuando lo hacemos siguiendo el arquetipo, si queremos esta creación automática debemos importar la clase en el *main* (donde se haga el init).
 """
 ```
 
@@ -218,7 +221,7 @@ En la operación UPDATE (PUT), se recibe un objeto JSON que contiene los datos d
 En la operación DELETE, se elimina una tarea específica de la tabla "Task" mediante su identificador único (id) y se devuelve como un objeto JSON.
 
 Por último, se define una ruta por defecto que devuelve un mensaje de bienvenida en formato JSON y se inicia la aplicación Flask.
-</span>
+
 
 **Nota**
 Las funciones de <code>@app.route("url", "metodo")</code> se pueden abreviar llamando directamente al nombre del método. Es decir <code>@app.get("url")</code>, <code>@app.post("url")</code>, <code>@app.put("url")</code>, <code>@app.delete("url")</code>.
@@ -236,7 +239,6 @@ Un "blueprint" en Python es una forma de organizar y modularizar una aplicación
 
 El url_prefix es opcional, sirve para dar una ruta común a todos los endpoints de ese Blueprint.
 
-</span>
 
 <hr>
 
@@ -300,7 +302,6 @@ Similar al POST. Recuperamos el id del que queremos modificar, le asignamos unos
 **Método Delete**
 ![Put](./Images/Python&Flask/delete.PNG)
 
-</span>
 
 <span id='habilitarCors'>
 
@@ -308,7 +309,6 @@ Similar al POST. Recuperamos el id del que queremos modificar, le asignamos unos
 
 ![CORS](./Images/Python&Flask/cors.PNG)
 
-</span>
 
 
 <hr>
@@ -408,7 +408,6 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
-</span>
 
 <hr>
 
@@ -503,7 +502,6 @@ Para utilizar JWT en Flask, se importa la extensión "flask_jwt_extended" y se c
 
 Por último, la función "create_access_token" para generar un token JWT cuando se autentica un usuario correctamente en la ruta de inicio de sesión. Este token se devuelve al usuario en la respuesta para que lo use en futuras solicitudes que requieran autenticación. También se utiliza la función "get_jwt_identity" para recuperar la identidad del usuario asociada con el token JWT en la ruta protegida.
 
-</span>
 
 <hr>
 
@@ -521,7 +519,6 @@ Una vez el servidor nos devuelve una respuesta con
 
 **Options Request:** Sirve para comprobar la configuración de los endpoints (operaciones disponibles, CORS, etc.). Al igual que la *head request* el cuerpo de la petición retornará vacío y se accederá a través del header.ç
 
-</span>
 
 <span id='tratamientoRespuestas'>
 
@@ -553,7 +550,6 @@ Del mismo modo, si deseas enviar datos desde tu programa Python a un servicio we
 
 En resumen, la conversión entre objetos JSON y objetos Python es necesaria para facilitar la comunicación entre aplicaciones que utilizan diferentes formatos de datos. La función "json()" en Python es una herramienta útil que te permite convertir datos JSON en objetos Python y viceversa.
 
-</span>
 
 <span id='codigosEstado'>
 
@@ -606,9 +602,6 @@ else:
 
 ```
 
-</span>
-
-
 <span id='redirecciones'>
 
 #### Redirecciones
@@ -622,7 +615,6 @@ Para evitar que nuestra petición original no sufra redirecciones lo indicaremos
 
 `response = response.get('URL', allow_redirects=False)`
 
-</span>
 
 <span id='timeouts'>
 
@@ -652,7 +644,6 @@ Si queremos indicar un tiempo en el que se debe completar la lectura de la petic
 Para eliminar cualquier tipo de timeout:
 `timeout=None`
 
-</span>
 
 <hr>
 
@@ -753,7 +744,121 @@ if __name__ == '__main__':
 ```
 En este ejemplo, se utiliza el decorador **@patch** para crear un mock de la función requests.get() en la función test_get_data_from_api. La función mock_get se pasa como argumento al método de prueba, y se utiliza para simular la respuesta de la API externa. La función mock_get.return_value.json.return_value se utiliza para simular la respuesta JSON de la API externa.
 
-</span>
+<hr>
+
+<span id='dto'>
+
+#### Uso de DTO
+
+```python
+from flask import Flask, jsonify, request
+from marshmallow import Schema, fields, validate
+from my_database import User  # importamos la clase que representa el modelo de la base de datos
+
+app = Flask(__name__)
+
+# Creamos una clase que representa los datos del usuario
+class UserDTO:
+    def __init__(self, username: str, email: str, password: str):
+        self.username = username
+        self.email = email
+        self.password = password
+
+# Creamos un esquema de Marshmallow para validar los datos del usuario
+class UserSchema(Schema):
+    username = fields.Str(required=True)
+    email = fields.Email(required=True)
+    password = fields.Str(required=True, validate=validate.Length(min=6))
+
+# Creamos una función que convierte un objeto User en un objeto UserDTO
+def user_to_dto(user: User) -> UserDTO:
+    return UserDTO(username=user.username, email=user.email, password='')
+
+# Creamos una función que convierte un objeto UserDTO en un objeto User
+def dto_to_user(dto: UserDTO) -> User:
+    return User(username=dto.username, email=dto.email, password=dto.password)
+
+# Creamos una ruta que crea un nuevo usuario
+@app.route('/users', methods=['POST'])
+def create_user():
+    data = request.json
+    user_schema = UserSchema()
+    errors = user_schema.validate(data)
+    if errors:
+        return jsonify({'error': errors}), 400
+    user_dto = UserDTO(**data)
+    user = dto_to_user(user_dto)
+    # guardar el usuario en la base de datos
+    db.session.add(user)
+    db.session.commit()
+    user_dto = user_to_dto(user)
+    return jsonify({'user': user_dto.__dict__}), 201
+
+# Creamos una ruta que obtiene un usuario por su ID
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.get(user_id)
+    if user:
+        user_dto = user_to_dto(user)
+        return jsonify({'user': user_dto.__dict__})
+    else:
+        return jsonify({'error': 'User not found'}), 404
+```
+
+En este ejemplo, se ha combinado la clase que representa el modelo de la base de datos (User) con un DTO (UserDTO) para encapsular y validar los datos que se reciben en la petición HTTP. También se ha utilizado un esquema de Marshmallow (UserSchema) para validar los datos del DTO antes de ser procesados por la aplicación. Además, se han creado dos funciones (user_to_dto y dto_to_user) para convertir los objetos de un tipo a otro.
+
+En la ruta /users se crea un nuevo usuario a partir de un objeto UserDTO y se guarda en la base de datos como un objeto User. Luego se convierte el objeto User en un objeto UserDTO para enviar como respuesta HTTP.
+
+En la ruta /users/<.int:user_id> se obtiene un usuario de la base de datos a través de su ID y se convierte en un objeto UserDTO para enviar como respuesta HTTP. Si el usuario no se encuentra en la base de datos, se devuelve un error 404.
+
+<hr>
+
+#### Flechas y Lambdas
+
+<span id='flechasylambdas'>
+
+**Flechas**
+Las flechas (->) en las funciones de Python se utilizan para indicar el tipo de retorno de la función. Esto se conoce como "anotación de tipo" y es una característica introducida en Python 3.5 para ayudar a mejorar la legibilidad del código y permitir a los editores y herramientas de desarrollo proporcionar una mejor ayuda para la escritura de código.
+
+La sintaxis para la anotación de tipo es colocar una flecha (->) seguida del tipo de retorno deseado después de los argumentos de la función. Por ejemplo:
+
+```python
+def suma(a: int, b: int) -> int:
+    return a + b
+```
+
+En este ejemplo, la función suma toma dos argumentos a y b, ambos de tipo int, y devuelve un valor de tipo int.
+
+Es importante tener en cuenta que la anotación de tipo en Python es opcional y no afecta la funcionalidad de la función. Es simplemente una ayuda para la legibilidad del código y para los editores y herramientas de desarrollo. Además, las anotaciones de tipo no se verifican en tiempo de ejecución, por lo que es posible que una función pueda devolver un valor de un tipo diferente al anotado.
+
+
+**Lambdas**
+Las lambdas en Python son funciones anónimas que se pueden definir en una sola línea de código y se utilizan para realizar operaciones simples en los datos. Las lambdas son útiles para crear funciones rápidas y pequeñas que se utilizarán en un lugar específico de la aplicación.
+
+La sintaxis básica de una lambda en Python es la siguiente:
+
+```python
+suma = lambda x, y: x + y
+```
+En este ejemplo, la lambda se asigna a la variable suma, y se puede llamar como una función normal:
+
+```python
+resultado = suma(3, 4)
+print(resultado) # salida: 7
+```
+
+Las lambdas son particularmente útiles cuando se utilizan en conjunto con funciones que toman funciones como argumentos. Por ejemplo, la función sorted de Python toma una función de comparación como argumento, y se puede proporcionar una lambda para hacer una comparación personalizada. Aquí hay un ejemplo:
+
+```python
+lista = [('Juan', 30), ('Ana', 25), ('Pedro', 35)]
+
+# ordenar la lista por la edad en orden ascendente
+lista_ordenada = sorted(lista, key=lambda x: x[1])
+
+print(lista_ordenada) # salida: [('Ana', 25), ('Juan', 30), ('Pedro', 35)]
+```
+
+En este ejemplo, se utiliza una lambda para seleccionar el segundo elemento de cada tupla en la lista, que es la edad. Luego se utiliza esta lambda como la clave para ordenar la lista.
 
 <hr>
 
@@ -763,4 +868,3 @@ En este ejemplo, se utiliza el decorador **@patch** para crear un mock de la fun
 
  - [Guía completa Flask](https://j2logo.com/tutorial-flask-espanol/)
 
-</span>
