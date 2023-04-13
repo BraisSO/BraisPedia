@@ -21,7 +21,8 @@
 15. [DTO](#dto)
 16. [Flechas y Lambdas](#flechasylambdas)
 17. [Serialización Marshmallow](#serialización)
-18. [Enlaces de interés](#enlaces)
+18. [Subida de archivos (con *chunks*)](#subida)
+19. [Enlaces de interés](#enlaces)
 
 
 <span id='intro'>
@@ -891,6 +892,85 @@ class UserSchema(Schema):
 ```
 
 En resumen, podemos utilizar ma.Schema cuando estamos trabajando con una aplicación de Flask y queremos crear un esquema de serialización y deserialización de manera rápida. Por otro lado, Schema() se utiliza cuando necesitamos crear un esquema en Python de manera independiente, sin necesidad de utilizar la funcionalidad de Flask.
+
+<hr>
+
+<span id='subida'>
+
+#### Subida de archivos (con *chunks*)
+
+Este código contiene un formulario HTML para la subida de multiples archivos que se enviarán a una API que se encargará del manejo y guardado de los mismos.
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Subir archivos</title>
+</head>
+
+<body>
+    <form method="POST" action="http://localhost:5000/upload" enctype="multipart/form-data">
+        <input type="file" name="file" multiple>
+        <input type="submit" value="Subir archivos">
+    </form>
+</body>
+
+</html>
+```
+Este código implementa un servidor web en Flask que permite subir archivos a través de una API RESTful. El servidor verifica si la carpeta para almacenar los archivos existe, si no, la crea. Luego, los archivos subidos por el usuario se dividen en lotes de tamaño máximo definido por la variable 'batch_size' y se guardan en la carpeta mencionada. Finalmente, el servidor devuelve una respuesta JSON indicando cuántos archivos se subieron y en cuántos lotes se dividió la subida.
+
+```python
+from flask import Flask, request, jsonify
+import os 
+
+app = Flask(__name__)
+
+def chunks(lst, n):
+    #"""Divide una lista en lotes de tamaño n."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    if request.method == 'POST':
+        # Verificar si la carpeta existe, si no, crearla
+        if not os.path.exists('subidaArchivos\\archivos'):
+            os.makedirs('subidaArchivos\\archivos')
+
+        # Obtener los archivos
+        files = request.files.getlist('file')
+        
+        #Enviar los archivos por lotes
+        batch_size = 10  # Define el tamaño máximo de un lote
+        #El número 10 en batch_size representa el tamaño máximo de un lote de archivos que se enviará en una sola petición. 
+        #En otras palabras, si el usuario selecciona 30 archivos para subir, estos archivos se dividirán en 3 lotes de 10 archivos cada uno
+        batches = list(chunks(files, batch_size))
+        total_files = len(files)
+        total_batches = len(batches)
+        for i, batch in enumerate(batches):
+            # Guardar los archivos en la carpeta subidaArchivos\archivos
+            for file in batch:
+                file.save(os.path.join('subidaArchivos\\archivos', file.filename))
+            
+        # Devolver una respuesta JSON
+        message = f'Se subieron {total_files} archivos en {total_batches} lotes'
+        return jsonify({'message': message})
+    else:
+        return jsonify({'message': 'Solicitud no valida'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+```
+
+La función ``enumerate()`` es una función de Python que toma una secuencia iterable (como una lista o una tupla) y devuelve un objeto iterable de pares (índice, elemento) en el que el índice es el número de elementos procesados hasta el momento y el elemento es el elemento correspondiente en la secuencia iterable.
+
+En este código, la función ``enumerate() ``se utiliza para recorrer cada lote de archivos y devolver el índice de cada lote en el bucle for. La variable i contiene el índice del lote actual y la variable batch contiene el conjunto de archivos para ese lote. Esto permite realizar operaciones específicas en cada lote, como guardar los archivos en la carpeta correspondiente.
+
+En resumen, la función ``enumerate()`` se utiliza para obtener el índice de cada lote de archivos y el conjunto de archivos correspondiente para poder procesarlos en el servidor.
 
 <hr>
 
