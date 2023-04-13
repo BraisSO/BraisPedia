@@ -1,3 +1,7 @@
+<span style="font-family: Times New Roman;">
+<span style="text-align: justify">
+<span style="font-size: medium;">
+
 # Controladores de rutas en Spring 
 - `@Controller` se utiliza para devolver vistas
 - `@RestController` se utiliza para devolver JSON

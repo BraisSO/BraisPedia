@@ -1,3 +1,7 @@
+<span style="font-family: Times New Roman;">
+<span style="text-align: justify">
+<span style="font-size: medium;">
+
 # Crear proyecto React con Vite
 Para crear un proyecto de React con la herramienta Vite, sigue estos pasos:
 

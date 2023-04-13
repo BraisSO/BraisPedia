@@ -1,3 +1,7 @@
+<span style="font-family: Times New Roman;">
+<span style="text-align: justify">
+<span style="font-size: medium;">
+
 # Conceptos fundamentales de React
 
 **Components**: React applications are built using reusable components. A component is a JavaScript class or function that returns a JSX element, which describes the component's layout and content. Here's an example of a simple component:

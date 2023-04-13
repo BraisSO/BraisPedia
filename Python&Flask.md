@@ -1,3 +1,7 @@
+<span style="font-family: Times New Roman;">
+<span style="text-align: justify">
+<span style="font-size: medium;">
+
 # Python & Flask
 **Índice**
 1. [Introducción](#intro)
@@ -16,7 +20,8 @@
 14. [Unit Testing](#unitTesting)
 15. [DTO](#dto)
 16. [Flechas y Lambdas](#flechasylambdas)
-17. [Enlaces de interés](#enlaces)
+17. [Serialización Marshmallow](#serialización)
+18. [Enlaces de interés](#enlaces)
 
 
 <span id='intro'>
@@ -480,7 +485,7 @@ def login():
     
     if user is not None and check_password_hash(user.password, password): 
         access_token = create_access_token(identity=username) #Si el login es correcto se crea el token y se asocia a un usuario
-        return jsonify({access_token: access_token},200) #Retorno de dicho token (no recomendable ni necesario - solo a modo de prueba)
+        return jsonify({access_token: access_token},200) #Retorno de dicho token 
 
     else: 
         return jsonify({'error':'unauthorized'})    
@@ -859,6 +864,33 @@ print(lista_ordenada) # salida: [('Ana', 25), ('Juan', 30), ('Pedro', 35)]
 ```
 
 En este ejemplo, se utiliza una lambda para seleccionar el segundo elemento de cada tupla en la lista, que es la edad. Luego se utiliza esta lambda como la clave para ordenar la lista.
+
+<hr>
+
+<span id='serializacion'>
+
+#### Serialización
+```python
+from flask_marshmallow import Marshmallow
+
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'username', 'email')
+```
+
+Por otro lado, Schema() es una clase que se importa directamente desde el paquete marshmallow. Es utilizado cuando no estamos trabajando con una aplicación de Flask, y necesitamos crear un esquema en Python de manera independiente. Para usar Schema(), simplemente importamos la clase y la utilizamos de la siguiente manera:
+
+
+```python
+from marshmallow import Schema, fields
+
+class UserSchema(Schema):
+    id = fields.Int()
+    username = fields.Str()
+    email = fields.Email()
+```
+
+En resumen, podemos utilizar ma.Schema cuando estamos trabajando con una aplicación de Flask y queremos crear un esquema de serialización y deserialización de manera rápida. Por otro lado, Schema() se utiliza cuando necesitamos crear un esquema en Python de manera independiente, sin necesidad de utilizar la funcionalidad de Flask.
 
 <hr>
 

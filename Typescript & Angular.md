@@ -1,3 +1,7 @@
+<span style="font-family: Times New Roman;">
+<span style="text-align: justify">
+<span style="font-size: medium;">
+
 # TypeScript 
 - `tsc -init` se utiliza para inicializar un proyecto TypeScript
 - `tsc -w` se utiliza para iniciar el "watch mode" y compilar automáticamente los cambios en los archivos TypeScript
