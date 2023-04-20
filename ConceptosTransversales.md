@@ -15,3 +15,9 @@ Las **migraciones** en programación web se refieren a la gestión y actualizaci
 
 **En Python:**
 ``load_dotenv()`` es una función de la biblioteca de Python "python-dotenv" que carga variables de entorno desde un archivo .env en el directorio base del proyecto y las agrega al entorno de ejecución.
+
+
+### FilterBy SQLAlchemy
+*Filtra directamente realizando la consulta a la base de datos*
+
+La función ``filter_by()`` es un método que se utiliza en SQLAlchemy, una biblioteca de Python para trabajar con bases de datos relacionales, para filtrar registros en una tabla de base de datos a través de una consulta.

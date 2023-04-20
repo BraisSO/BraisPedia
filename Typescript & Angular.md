@@ -13,6 +13,8 @@
 - `ng serve -o` se utiliza para iniciar el servidor de desarrollo y abrir automáticamente el navegador en la página principal del proyecto
 - `ng g c components/nav` se utiliza para generar un componente llamado "nav" en la carpeta "components"
 - `ng g s services/departamento` se utiliza para generar un servicio llamado "departamento" en la carpeta "services"
+- `ng g c features/demo --skip-import` *skip-import* indica al CLI que no importe automáticamente el componente en el archivo del módulo correspondiente, lo que significa que tendrás que hacerlo manualmente.
+- `ng g module features/demo --routing` creacion del module y del routing module para cada componente
 
 # Modulos vistos:
 - `FormsModule` se utiliza para trabajar con formularios en Angular
@@ -116,9 +118,19 @@ Directives are used to add logic and control flow to templates. Angular has seve
 ```
 
 **Pipes**
-Pipes are used to transform data in templates. Angular has several built-in pipes, such as date, currency, and uppercase, and you can also create your own custom pipes. Here's an example of using the date pipe:
+En Angular, una pipe (tubería) es una característica que permite transformar datos antes de mostrarlos en la vista. Una pipe toma un valor de entrada y devuelve un valor transformado. Las pipes se utilizan para formatear, filtrar y transformar datos.
 
-<code><span>{{ date | date:'medium' }}</span></code>
+Aquí hay algunos ejemplos de pipes en Angular:
+
+**DatePipe:** Esta pipe se utiliza para formatear fechas. Por ejemplo, si tenemos una fecha en formato de objeto Date y queremos mostrarla en la vista en un formato legible por humanos, podemos utilizar la DatePipe de la siguiente manera:
+
+`<p>{{ fecha | date:'dd/MM/yyyy' }}</p>`
+
+En este ejemplo, fecha es un objeto Date y la pipe date formatea la fecha en formato dd/MM/yyyy.
+
+**UppercasePipe:** Esta pipe se utiliza para convertir texto en mayúsculas. Por ejemplo, si queremos mostrar un título en mayúsculas, podemos utilizar la UppercasePipe de la siguiente manera:
+
+`<h1>{{ titulo | uppercase }}</h1>`
 
 **Modules**
 Modules are used to organize an Angular application into cohesive blocks of functionality. An application is divided into multiple modules and each module can have its own components, services, and other objects. Here's an example of creating a module:
@@ -403,3 +415,162 @@ Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
 Una vez puesto esto en la configuración, marcamos los breakpoint y al ejecutar el código que queremos debuggear, se parará en dichos puntos. *Si ejecutamos otro componente o parte de la página no funciona.*
 
 
+#Multi-Idioma
+
+Para crear una aplicación Angular multilingüe con ngx-translate, hay que seguir los siguientes pasos:
+
+Instalar los paquetes de ngx-translate:
+
+``npm i @ngx-translate/core --save``
+
+``npm i @ngx-translate/http-loader --save``
+
+Importar y registrar el módulo TranslateModule en app.module.ts:
+
+```typescript
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
+  ],
+  bootstrap: [AppComponent]
+})
+
+export class AppModule { }
+
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
+```
+
+Crear los archivos de traducción en la carpeta assets/i18n para cada idioma y configurar el loader. Por ejemplo, para el inglés y el español:
+
+`src/assets/i18n/en.json`
+`src/assets/i18n/es.json`
+
+
+En estos archivos se definen los valores en pares clave-valor.
+
+Implementar las traducciones en el componente con el servicio TranslateService:
+
+```typescript
+import { TranslateService } from '@ngx-translate/core';
+
+export class AppComponent {
+  constructor(
+    public translate: TranslateService
+  ) {
+    translate.addLangs(['en', 'es']);
+    translate.setDefaultLang('en');
+  }
+}
+```
+Con translate.addLangs(['en', 'es']) se define qué idiomas se van a utilizar y con translate.setDefaultLang('en') se establece el idioma por defecto.
+
+Añadir un selector de idiomas en la interfaz de usuario que llame a la función translate.use(lang) para cambiar el idioma de la aplicación:
+
+```typescript
+switchLang(lang: string) {
+  this.translate.use(lang);
+}
+```
+
+```html
+<div class="form-inline">
+  <select 
+      class="form-control" 
+      #selectedLang 
+      (change)="switchLang(selectedLang.value)">
+    <option *ngFor="let language of translate.getLangs()" 
+      [value]="language"
+      [selected]="language === translate.currentLang">
+      {{ language }}
+    </option>
+  </select>
+  </div>
+
+```
+Este selector permitirá cambiar el idioma de la aplicación.
+
+Como luciría el **HTML**:
+```html
+<nav class="navbar navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand">
+      {{'Sitetitle' | translate }}
+    </a>
+    <div class="form-inline">
+      <select class="form-control" #selectedLang (change)="switchLang(selectedLang.value)">
+        <option *ngFor="let language of translate.getLangs()" [value]="language"
+          [selected]="language === translate.currentLang">
+          {{ language }}
+        </option>
+      </select>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <form>
+    <div class="form-group">
+      <label>{{'Name' | translate}}</label>
+      <input type="text" class="form-control">
+      <small class="text-danger">{{'NameError' | translate}}</small>
+    </div>
+    <div class="form-group">
+      <label>{{'Email' | translate}}</label>
+      <input type="email" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>{{'PhoneNo' | translate}}</label>
+      <input type="tel" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>{{'Password' | translate}}</label>
+      <input type="password" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>{{'Bio' | translate}}</label>
+      <textarea rows="3" class="form-control"></textarea>
+    </div>
+    <div class="form-group form-check">
+      <input type="checkbox" class="form-check-input">
+      <label class="form-check-label">{{'TermsConditions' | translate}}</label>
+    </div>
+    <button type="submit" class="btn btn-block btn-danger">{{'Submit' | translate}}</button>
+  </form>
+</div>
+```
+
+
+Como luciría el **app.component.ts**:
+
+```typescript
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+})
+export class AppComponent {
+  constructor(public translate: TranslateService) {
+    translate.addLangs(['en', 'nl']);
+    translate.setDefaultLang('en');
+  }
+  switchLang(lang: string) {
+    this.translate.use(lang);
+  }
+}
+```
