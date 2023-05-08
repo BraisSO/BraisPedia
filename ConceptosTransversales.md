@@ -21,3 +21,7 @@ Las **migraciones** en programación web se refieren a la gestión y actualizaci
 *Filtra directamente realizando la consulta a la base de datos*
 
 La función ``filter_by()`` es un método que se utiliza en SQLAlchemy, una biblioteca de Python para trabajar con bases de datos relacionales, para filtrar registros en una tabla de base de datos a través de una consulta.
+  
+ 
+### Git
+ - **Merge sin eliminar rama mergeada:** `git merge --no-ff branch-to-merge`
