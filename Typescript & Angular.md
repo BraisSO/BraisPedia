@@ -15,8 +15,9 @@
 - `ng g s services/departamento` se utiliza para generar un servicio llamado "departamento" en la carpeta "services"
 - `ng g c features/demo --skip-import` *skip-import* indica al CLI que no importe automáticamente el componente en el archivo del módulo correspondiente, lo que significa que tendrás que hacerlo manualmente.
 - `ng g module features/demo --routing` creacion del module y del routing module para cada componente
+- `ng test --code-coverage` ejecución de los test
 
-# Modulos vistos:
+# Modulos:
 - `FormsModule` se utiliza para trabajar con formularios en Angular
 - `RouterModule` se utiliza para establecer las rutas en una aplicación Angular
   
@@ -574,3 +575,109 @@ export class AppComponent {
   }
 }
 ```
+
+# Testing con Jasmine
+
+#### Ejemplo propio:
+
+ `ng test --code-coverage` ejecución de los test.
+ `ng test --include [src/app/x/.component.spec.ts] --code-coverage` ejecución solo del fichero de test deseado
+
+ Conceptos en los test cuando vemos el *coverage*:
+
+ - **Statements**: se refiere al porcentaje de sentencias de código (declaraciones de variables, asignaciones, llamadas a funciones, etc.) que han sido ejecutadas al menos una vez por los tests. 
+
+- **Branches**: se refiere al porcentaje de caminos posibles en el código que han sido ejecutados al menos una vez por los tests. Un "camino" se define como un flujo de ejecución dentro de una estructura de control de flujo, como un if, un while, un for, etc. 
+
+- **Functions**: se refiere al porcentaje de funciones que han sido ejecutadas al menos una vez por los tests. 
+
+- **Lines**: se refiere al porcentaje de líneas de código que han sido ejecutadas al menos una vez por los tests.
+
+```typescript
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+import { UserEditComponent } from './user-edit.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from 'src/app/material.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+describe('UserEditComponent', () => {
+  let component: UserEditComponent;
+  let fixture: ComponentFixture<UserEditComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule,
+        RouterTestingModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        TranslateModule.forRoot(),
+        BrowserAnimationsModule
+
+      ],
+
+      declarations: [UserEditComponent]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(UserEditComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  describe('checkUsername', () => {
+    it('should return true if username exists in otherUsersUsername array', () => {
+      component.otherUsersUsername = ['john', 'jane', 'smith'];
+      expect(component.checkUsername('jane')).toBe(true);
+    });
+
+    it('should return false if username does not exist in otherUsersUsername array', () => {
+      component.otherUsersUsername = ['john', 'jane', 'smith'];
+      expect(component.checkUsername('doe')).toBe(false);
+    });
+  })
+
+  describe('emailValidator', () => {
+    let control: FormControl;
+
+    beforeEach(() => {
+      control = new FormControl();
+    });
+
+    it('should return null if the email is valid', () => {
+      control.setValue('example@test.com');
+      const validatorFn = component.emailValidator();
+      const result = validatorFn(control);
+      expect(result).toBeNull();
+    });
+
+    it('should return an error object if the email is invalid', () => {
+      control.setValue('example@test.');
+      const validatorFn = component.emailValidator();
+      const result = validatorFn(control);
+      expect(result).toEqual({ emailInvalid: true });
+    });
+
+    it('should return null if the control value is empty', () => {
+      control.setValue('');
+      const validatorFn = component.emailValidator();
+      const result = validatorFn(control);
+      expect(result).toBeNull();
+    });
+
+  });
+});
+
+
+```
+
+- [Guía Jasmine]([https://](https://mbascoy.github.io/knowledge/Programacion/Angular/Conceptos%20avanzados/Testing%20con%20Jasmine.html))
+
+
