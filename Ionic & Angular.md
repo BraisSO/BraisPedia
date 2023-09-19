@@ -175,4 +175,16 @@ startScan = async () => {
 ### Utiles
 
 - Documentación Ionic: [Ionic Docs.](https://ionicframework.com/docs)
+- Documentación Ionic: [Capacitor Docs.](https://capacitorjs.com/docs)
 - Página de iconos de Ionic: [Ionic Icons](https://ionic.io/ionicons)
+- [Obtener plataforma o sistema del dispositivo ](https://www.youtube.com/watch?v=EBxYajqQqT4&list=PLsngLoGbAagFEG-jwlpPhGsLzMSQ0tadP&index=24&pp=iAQB)
+- [Obligar al usuario a actualizar la app ](https://www.youtube.com/watch?v=79eH7tpDj0M&list=PLsngLoGbAagFEG-jwlpPhGsLzMSQ0tadP&index=25&pp=iAQB)
+- [Obtener la ubicación del dispotivo ](https://www.youtube.com/watch?v=KD15dCAUb-Q&list=PLsngLoGbAagFEG-jwlpPhGsLzMSQ0tadP&index=26&pp=iAQB)
+  - [Plugin geolocalización necesario](https://ionicframework.com/docs/native/geolocation)
+  - [Libreria para conversiones geográficas](https://github.com/Cap-go/capacitor-nativegeocoder#forwardgeocode)
+
+- [Sqlite con Ionic](https://youtu.be/BM70fDqUo3c)
+- [Debugging con Ionic](https://youtu.be/VN3VzMx8kSA)
+- [Implementación de un *swipper*](https://youtu.be/01jwVb3WLoA)
+
+

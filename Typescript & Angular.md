@@ -2,6 +2,31 @@
 <span style="text-align: justify">
 <span style="font-size: medium;">
 
+#TypeScript & Angular
+**Índice**
+- [TypeScript](#typescript)
+- [Angular](#angular)
+- [Modulos:](#modulos)
+- [Conceptos fundamentales de Angular](#conceptos-fundamentales-de-angular)
+- [CRUD](#crud)
+    - [HTML](#html)
+    - [Model](#model)
+    - [Service](#service)
+    - [Component Typescript](#component-typescript)
+- [Extra](#extra)
+        - [Como recargar una página tras ejecutar una funcion:](#como-recargar-una-página-tras-ejecutar-una-funcion)
+      - [Como recorrer un mapa:](#como-recorrer-un-mapa)
+      - [Configurar Debugger](#configurar-debugger)
+- [Multi-Idioma](#multi-idioma)
+- [Testing con Jasmine](#testing-con-jasmine)
+    - [Ejemplo propio](#ejemplo-propio)
+    - [Enlaces de interés testing](#enlaces-de-interés-testing)
+- [Interacción entre componentes](#interacción-entre-componentes)
+- [Inyección de dependencias](#inyección-de-dependencias)
+- [Enlaces de interés](#enlaces-de-interés)
+
+
+
 # TypeScript 
 - `tsc -init` se utiliza para inicializar un proyecto TypeScript
 - `tsc -w` se utiliza para iniciar el "watch mode" y compilar automáticamente los cambios en los archivos TypeScript
@@ -353,16 +378,16 @@ editarDisco(id:number){
 
 ```
 
-# Extra
+# Extra 
 
-**Como recargar una página tras ejecutar una funcion:**
+##### Como recargar una página tras ejecutar una funcion:
 <code> location.reload(); //recarga de la pagina </code>
 
 Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
 
 <hr>
 
-**Como recorrer un mapa:**
+#### Como recorrer un mapa:
 ```typescript
   getExtMoneyList(){
     this.extCurrencyService.getExtCurrencies().subscribe(res=>{
@@ -379,7 +404,7 @@ Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
   }
 
 ```
-**Configurar Debugger**
+#### Configurar Debugger
 
 ```json
 {
@@ -416,7 +441,7 @@ Si queremos enviar a otra dirección tiene que ser con **<i>Router</i>**.
 Una vez puesto esto en la configuración, marcamos los breakpoint y al ejecutar el código que queremos debuggear, se parará en dichos puntos. *Si ejecutamos otro componente o parte de la página no funciona.*
 
 
-#Multi-Idioma
+# Multi-Idioma
 
 Para crear una aplicación Angular multilingüe con ngx-translate, hay que seguir los siguientes pasos:
 
@@ -578,7 +603,7 @@ export class AppComponent {
 
 # Testing con Jasmine
 
-#### Ejemplo propio:
+### Ejemplo propio
 
  `ng test --code-coverage` ejecución de los test.
  `ng test --include [src/app/x/.component.spec.ts] --code-coverage` ejecución solo del fichero de test deseado
@@ -607,6 +632,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('UserEditComponent', () => {
   let component: UserEditComponent;
   let fixture: ComponentFixture<UserEditComponent>;
+  let control: FormControl;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -628,27 +654,23 @@ describe('UserEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  beforeEach(() => {
+    control = new FormControl();
   });
 
-  describe('checkUsername', () => {
     it('should return true if username exists in otherUsersUsername array', () => {
-      component.otherUsersUsername = ['john', 'jane', 'smith'];
-      expect(component.checkUsername('jane')).toBe(true);
+        component.otherUsersUsername = ['john', 'jane', 'smith'];
+        expect(component.checkUsername('jane')).toBe(true);
+      });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
     });
+
 
     it('should return false if username does not exist in otherUsersUsername array', () => {
       component.otherUsersUsername = ['john', 'jane', 'smith'];
       expect(component.checkUsername('doe')).toBe(false);
-    });
-  })
-
-  describe('emailValidator', () => {
-    let control: FormControl;
-
-    beforeEach(() => {
-      control = new FormControl();
     });
 
     it('should return null if the email is valid', () => {
@@ -671,13 +693,53 @@ describe('UserEditComponent', () => {
       const result = validatorFn(control);
       expect(result).toBeNull();
     });
-
-  });
-});
-
+  })
 
 ```
 
-- [Guía Jasmine]([https://](https://mbascoy.github.io/knowledge/Programacion/Angular/Conceptos%20avanzados/Testing%20con%20Jasmine.html))
+### Enlaces de interés testing
+- [Guía Jasmine](https://mbascoy.github.io/knowledge/Programacion/Angular/Conceptos%20avanzados/Testing%20con%20Jasmine.html)
+  
+- [Elementos básicos (beforeEach(), byCss(), ejemplos, etc.)](https://angular.io/guide/testing-components-basics)
+  
+- [Testing component escenarios](https://angular.io/guide/testing-components-scenarios#component-testing-scenarios)
+
+- Videos:
+  - [HttpTesting & Pipe Testing](https://www.youtube.com/playlist?list=PL_WGMLcL4jzVoCpd-QhvfM0v8lNUa8OSQ)
+  - [Testing con interactividad (asignar a inputs + click)](https://www.youtube.com/watch?v=c3ahq1x_OOo&list=PLHgpVrCyLWApcgDNVxsdCDXy3p3XmxwbX&index=3&pp=iAQB)
+  - [Tipos de *expect*](https://www.youtube.com/watch?v=idLGQYEv2Ts&list=PLHgpVrCyLWApcgDNVxsdCDXy3p3XmxwbX&index=5&pp=iAQB)
+    
+
+# Interacción entre componentes
+- [Interacción entre componentes (@Input, @Output)](https://docs.angular.lat/guide/component-interaction#component-interaction)
+  
+# Inyección de dependencias
+
+Cuando creamos código que va a ser inyectado en un componente a través de un servicio, **debemos registrarlo en los providers del módulo correspondiente al componente**. Se registra en el array de ***providers***.
+
+Otra forma de hacer esta inyección es en el propio servicio, agregando despues de las importaciones: 
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+```
+
+
+Para inyectar un servicio dentro de otro lo hacemos de la siguiente manera:
+
+![Inyección Angular](./Images/inyecciónAngular.png)
+
+
+# Enlaces de interés
+- [Curso muy completo de angular](https://www.youtube.com/playlist?list=PLU8oAlHdN5BnNAe8zXnuBNzKID39DUwcO)
+- [Angular Sinals - Nueva funcionalidad de Angular para el control de estados](https://angular.io/guide/signals)
+  
+
+
+
+
+
+
 
 
