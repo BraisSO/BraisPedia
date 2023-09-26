@@ -184,6 +184,7 @@ startScan = async () => {
   - [Libreria para conversiones geográficas](https://github.com/Cap-go/capacitor-nativegeocoder#forwardgeocode)
 
 - [Sqlite con Ionic](https://youtu.be/BM70fDqUo3c)
+- [Sqlite con Ionic - Repo](https://github.com/jepiqueau/angular-sqlite-app-starter)
 - [Debugging con Ionic](https://youtu.be/VN3VzMx8kSA)
 - [Implementación de un *swipper*](https://youtu.be/01jwVb3WLoA)
 
