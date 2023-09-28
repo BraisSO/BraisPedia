@@ -24,6 +24,8 @@
 - [Interacción entre componentes](#interacción-entre-componentes)
 - [Inyección de dependencias](#inyección-de-dependencias)
 - [Asincronía en JavaScript/Typescript + Angular](#asincronía-en-javascripttypescript--angular)
+- [Funciones importantes](#funciones-importantes)
+    - [Map \& Filter](#map--filter)
 - [Enlaces de interés](#enlaces-de-interés)
 
 
@@ -935,8 +937,14 @@ Este es un ejemplo básico de cómo puedes utilizar async y await con HttpClient
 **Asincronía bloqueante vs no bloqueante (bloquente == async await)**
 ![bloqueantevsnobloqueante](Images\bloqueantevsnobloqueante.PNG)
 
-**Ejemplo simple de como consumir la asincronía**
+**Ejemplo simple de como consumir la asincronía (en este caso se convierte un observable en una promesa con lastValueFrom()**
 ![Async-Await](Images\async-await.PNG)
+
+**Consumo directo de una promesa bloqueante async/await**
+![Async-Await](Images\asyncawaitPromise.PNG)
+
+**Consumo de una promesa no bloqueante .then & .catch**
+![Async-Await](Images\promiseThenCatch.PNG)
 
 
 **Como realizar peticiones http anidadas**
@@ -963,6 +971,12 @@ ngOnInit(){
 }
 ```
 
+# Funciones importantes
+### Map & Filter
+- La función **map** sirve para devolver un array u objeto con las características que te interesan de otro objeto con más propiedades.
+- La función **filter** devuelve un array con los objetos o propiedades del objeto que cumplan una condición especificada.
+
+![MapYFilter](Images/mapYfilter.png)
 
 
 
