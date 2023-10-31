@@ -976,8 +976,16 @@ ngOnInit(){
 - La función **map** sirve para devolver un array u objeto con las características que te interesan de otro objeto con más propiedades.
 - La función **filter** devuelve un array con los objetos o propiedades del objeto que cumplan una condición especificada.
 
+En gran medida estas dos funciones nos permiten iterar sobre un array u objeto evitando usar bucles.
+
+**Basico**
 ![MapYFilter](Images/mapYfilter.png)
 
+**Map & Filter combinados con tipado retornando un array**
+![MapYFilterTipados](Images/map&filterTipados.png)
+
+**Map & Filter combinados con tipado retornando un objeto**
+![MapYFilterTipadosObjetos](Images/map&filterTipadosObjetos.png)
 
 
 
