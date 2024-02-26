@@ -26,6 +26,10 @@
 - [Asincronía en JavaScript/Typescript + Angular](#asincronía-en-javascripttypescript--angular)
 - [Funciones importantes](#funciones-importantes)
     - [Map \& Filter](#map--filter)
+- [Cambio de flujo y directivas Angular17](#cambio-de-flujo-y-directivas-angular17)
+      - [@if @else](#if-else)
+      - [@for](#for)
+      - [@defer](#defer)
 - [Enlaces de interés](#enlaces-de-interés)
 
 
@@ -986,6 +990,18 @@ En gran medida estas dos funciones nos permiten iterar sobre un array u objeto e
 
 **Map & Filter combinados con tipado retornando un objeto**
 ![MapYFilterTipadosObjetos](Images/map&filterTipadosObjetos.png)
+
+# Cambio de flujo y directivas Angular17
+
+#### @if @else
+ ![ngif](Images/ngif.jpeg)
+
+#### @for
+ ![for](Images/ngfor.jpeg)
+ 
+#### @defer
+![defer](Images/defer.jpeg)
+ 
 
 
 
