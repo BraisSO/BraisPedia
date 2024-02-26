@@ -3,6 +3,7 @@
 <span style="font-size: medium;">
 
 #TypeScript & Angular
+
 **Índice**
 - [TypeScript](#typescript)
 - [Angular](#angular)
@@ -939,16 +940,19 @@ Este es un ejemplo básico de cómo puedes utilizar async y await con HttpClient
 
 
 **Asincronía bloqueante vs no bloqueante (bloquente == async await)**
-![bloqueantevsnobloqueante](Images\bloqueantevsnobloqueante.PNG)
+
+![bloqueantevsnobloqueante](Images/bloqueantevsnobloqueante.PNG)
 
 **Ejemplo simple de como consumir la asincronía (en este caso se convierte un observable en una promesa con lastValueFrom()**
-![Async-Await](Images\async-await.PNG)
+![Async-Await](Images/async-await.PNG)
 
 **Consumo directo de una promesa bloqueante async/await**
-![Async-Await](Images\asyncawaitPromise.PNG)
+
+![Async-Await](Images/asyncawaitPromise.PNG)
 
 **Consumo de una promesa no bloqueante .then & .catch**
-![Async-Await](Images\promiseThenCatch.PNG)
+
+![Async-Await](Images/promiseThenCatch.PNG)
 
 
 **Como realizar peticiones http anidadas**
