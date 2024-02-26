@@ -987,12 +987,15 @@ ngOnInit(){
 En gran medida estas dos funciones nos permiten iterar sobre un array u objeto evitando usar bucles.
 
 **Basico**
+
 ![MapYFilter](Images/mapYfilter.png)
 
 **Map & Filter combinados con tipado retornando un array**
+
 ![MapYFilterTipados](Images/map&filterTipados.png)
 
 **Map & Filter combinados con tipado retornando un objeto**
+
 ![MapYFilterTipadosObjetos](Images/map&filterTipadosObjetos.png)
 
 # Cambio de flujo y directivas Angular17
