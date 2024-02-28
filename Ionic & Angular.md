@@ -172,6 +172,41 @@ startScan = async () => {
 };
 ```
 
+### Apuntes del curso - Aprende Ionic 7 con proyectos prácticos
+
+- Cuando en ionic queremos modificar los estilos y nos encontramos con un **shadow root** (se puede ver en el inspector del navegador) debemos utilizar el css con ''--''.
+`--overflow: hidden; `
+<br>
+
+- En la propiedad **[disabled]** se pueden evaluar condiciones.
+`[disabled]="n==0"`
+<br>
+
+- En una app standalone los ion-icons se deben importar de la siguiente manera:
+
+   ```typescript
+
+      import { Component } from '@angular/core';
+      import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonText, IonFooter, IonChip } from '@ionic/angular/standalone';
+      import { addIcons } from 'ionicons'; 
+      import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
+
+      @Component({
+        selector: 'app-home',
+        templateUrl: 'home.page.html',
+        styleUrls: ['home.page.scss'],
+        standalone: true,
+        imports: [IonChip, IonFooter, IonText, IonIcon, IonButton, IonHeader, IonToolbar, IonTitle, IonContent],
+      })
+      export class HomePage {
+        constructor() {
+          addIcons({ "chevron-down": chevronDownOutline, "chevron-up": chevronUpOutline })
+        }
+      }
+  ```
+  <br>
+
+
 ### Utiles
 
 - Documentación Ionic: [Ionic Docs.](https://ionicframework.com/docs)
