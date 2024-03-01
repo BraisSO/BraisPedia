@@ -206,6 +206,33 @@ startScan = async () => {
   ```
   <br>
 
+- Como pasar datos entre páginas en Ionic y navegar a ellas: 
+
+La que envía los datos:
+```typescript  
+    goToDetail(pokemon: Pokemon){
+    this.navParams.data["pokemon"] = pokemon;
+    this.navController.navigateForward("detail-pokemon");
+  } 
+```
+La que los recibe:
+```typescript
+    constructor(
+    private navParams:NavParams,
+    private navController: NavController
+    ) { 
+
+    this.pokemon = this.navParams.get('pokemon')
+
+    }
+
+  public goBack(){
+    this.navController.pop();
+  } 
+```
+
+**Tenemos que tener en cuenta que en Ionic, a diferencia de una página web, la navegación se hace en forma de pila. Por lo que la pagina anterior permanece cargada y podemos volver a ella eliminando del stack en la que nos encontramos. La navegación por lo tanto debe ser finita y seguir un recorrido, sino se puede saturar el stack.**
+
 
 ### Utiles
 
