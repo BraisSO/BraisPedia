@@ -234,7 +234,7 @@ La que los recibe:
 **Tenemos que tener en cuenta que en Ionic, a diferencia de una página web, la navegación se hace en forma de pila. Por lo que la pagina anterior permanece cargada y podemos volver a ella eliminando del stack en la que nos encontramos. La navegación por lo tanto debe ser finita y seguir un recorrido, sino se puede saturar el stack.**
 
 
-Una pipe recibe unos imputs y devuelve un resultado. En este caso se le pasa el objeto del pokemon y el nameStat que estamos buscando, si lo encuentra devolverá un resultado numerico. Se invoca directamente en el HTML, el ejemplo que se muestra a continuación se invocaría de la siguiente manera: `obj | nombrePipe: 'parametro'` .
+- Una pipe recibe unos imputs y devuelve un resultado. En este caso se le pasa el objeto del pokemon y el nameStat que estamos buscando, si lo encuentra devolverá un resultado numerico. Se invoca directamente en el HTML, el ejemplo que se muestra a continuación se invocaría de la siguiente manera: `obj | nombrePipe: 'parametro'` .
 
 Ejemplo de pipe: 
 
@@ -252,6 +252,32 @@ export class GetStatPipe implements PipeTransform {
 }
 
 ```
+
+- Servicio y consumición de dicho servicio con sintaxis nativa de JS (sin importar ningun HttpClient):
+
+```typescript 
+  getCoupons(){
+    return fetch('./assets/data/data.json').then(async res => {
+      const coupons: Coupon[] = await res.json() as Coupon[];
+      coupons.forEach(c => c.active = false);
+      return Promise.resolve(coupons);
+    }).catch(err =>{
+      console.error(err)
+      return Promise.reject([]);
+    })
+  }
+```
+
+```typescript
+  ngOnInit() {
+    this.couponsService.getCoupons().then((coupons: Coupon[]) => {
+      this.coupons = coupons;
+      console.log(this.coupons);
+    })
+  }
+```
+
+
 
 
 ### Utiles
