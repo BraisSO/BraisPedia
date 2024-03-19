@@ -277,8 +277,64 @@ export class GetStatPipe implements PipeTransform {
   }
 ```
 
+- Configuración de las traducciones: 
+
+  1- Instalamos: 
+
+  ``
+  @ngx-translate/http-loader
+  ``
+  ``
+  @ngx-translate/core
+  ``
+  <br>
+
+  2- Configuramos el *app.module.ts* de la siquiente manera:
+  ```typescript
+  import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+  import { HttpClient, HttpClientModule } from '@angular/common/http';
+  import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+  export function HttpLoaderFactory(http: HttpClient){
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  }
+
+  @NgModule({
+    declarations: [AppComponent],
+    imports: [
+      BrowserModule,
+      IonicModule.forRoot(),
+      AppRoutingModule,
+      HttpClientModule,
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
+      })
+    ],
+
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+    bootstrap: [AppComponent],
+  })
+  export class AppModule { }
+  ```
+
+  3- Creamos los *.json* de idioma en la ruta que hayamos definido.
 
 
+<br>
+
+- **En Ionic el size de las ion-col es parametrizable:**
+ `<ion-col [size]="extra.blocks.length == 1 ? 12 : 6">`
+
+<br>
+
+- **Ionic lifecycle**
+  Este es el orden el que se ejecutan las funciones al cargar cada una de las paginas de Ionic. Por ej. el ngOnInit solo se ejecuta la primera vez que se carga el componente, no cada vez que se entra en el.
+  
+  ![Async-Await](Images/ionic-lifecycle.PNG)
 
 ### Utiles
 
